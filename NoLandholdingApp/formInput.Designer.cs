@@ -49,6 +49,8 @@
             this.checkBoxMarried = new System.Windows.Forms.CheckBox();
             this.checkBoxSingle = new System.Windows.Forms.CheckBox();
             this.btnPrintSave = new System.Windows.Forms.Button();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.btnSearch = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // labelParentGuardian
@@ -243,6 +245,8 @@
             // checkBoxSingle
             // 
             this.checkBoxSingle.AutoSize = true;
+            this.checkBoxSingle.Checked = true;
+            this.checkBoxSingle.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxSingle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxSingle.Location = new System.Drawing.Point(558, 258);
             this.checkBoxSingle.Name = "checkBoxSingle";
@@ -262,11 +266,31 @@
             this.btnPrintSave.UseVisualStyleBackColor = true;
             this.btnPrintSave.Click += new System.EventHandler(this.btnPrintSave_Click);
             // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(872, 87);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(206, 20);
+            this.txtSearch.TabIndex = 22;
+            this.txtSearch.TextChanged += new System.EventHandler(this.searchBox_TextChanged);
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(1085, 87);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnSearch.TabIndex = 23;
+            this.btnSearch.Text = "SEARCH";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
             // formInput
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1350, 729);
+            this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.btnPrintSave);
             this.Controls.Add(this.checkBoxSingle);
             this.Controls.Add(this.checkBoxMarried);
@@ -317,6 +341,8 @@
         private System.Windows.Forms.CheckBox checkBoxMarried;
         private System.Windows.Forms.CheckBox checkBoxSingle;
         private System.Windows.Forms.Button btnPrintSave;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.Button btnSearch;
     }
 }
 

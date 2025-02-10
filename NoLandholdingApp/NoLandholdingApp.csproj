@@ -123,10 +123,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CertificationDataSet.cs">
+      <DependentUpon>CertificationDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="CertificationDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CertificationDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="SearchResultReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SearchResultReportForm.Designer.cs">
+      <DependentUpon>SearchResultReportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SearchResultsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SearchResultsForm.Designer.cs">
+      <DependentUpon>SearchResultsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReportForm.Designer.cs">
+      <DependentUpon>ReportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="formInput.cs">
       <SubType>Form</SubType>
@@ -139,7 +160,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\DataSources\CertificationData.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
-    <EmbeddedResource Include="CertificationReport2.rdlc" />
     <EmbeddedResource Include="formInput.resx">
       <DependentUpon>formInput.cs</DependentUpon>
     </EmbeddedResource>
@@ -153,6 +173,15 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <EmbeddedResource Include="CertificationReport.rdlc" />
+    <EmbeddedResource Include="ReportForm.resx">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchResultReportForm.resx">
+      <DependentUpon>SearchResultReportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchResultsForm.resx">
+      <DependentUpon>SearchResultsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="CertificationDataSet.xsc">
       <DependentUpon>CertificationDataSet.xsd</DependentUpon>
     </None>
