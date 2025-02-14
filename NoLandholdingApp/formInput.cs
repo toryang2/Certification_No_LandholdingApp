@@ -13,6 +13,11 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using MySql.Data.MySqlClient;
 using Microsoft.Reporting.WebForms;
 using Microsoft.Reporting.WinForms;
+using TextBox = System.Windows.Forms.TextBox;
+using Button = System.Windows.Forms.Button;
+using System.Globalization;
+using System.Windows.Forms.VisualStyles;
+using System.Security.Cryptography;
 
 namespace NoLandholdingApp
 {
@@ -22,11 +27,40 @@ namespace NoLandholdingApp
         private int currentPage;
         private float scaleFactor;
 
+
         // Set default value on form load
         private void Form_Load(object sender, EventArgs e)
         {
             // Set the "Single" checkbox as checked by default
             checkBoxSingle.Checked = true;
+
+        }
+
+        // KeyPress event to allow user to type a date
+        private void dateTimePickerDateIssued_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Allow digits, backspace, and slash
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != '/' && e.KeyChar != '\b')
+            {
+                e.Handled = true;  // Ignore the key press if it's not a valid character
+            }
+        }
+
+        // Optional: Validate the input date when text changes
+        private void DateTimePickerDateIssued_TextChanged(object sender, EventArgs e)
+        {
+            string input = dateTimePickerDateIssued.Text;
+
+            if (DateTime.TryParse(input, out DateTime validDate))
+            {
+                dateTimePickerDateIssued.Value = validDate;  // Update the DateTimePicker value
+            }
+            else
+            {
+                // Optional: Show a message if the input is invalid
+                // For example, display an error message or set the date back to default
+                dateTimePickerDateIssued.Value = DateTime.Now;  // Reset to current date or a default value
+            }
         }
 
         // Handle the Married checkbox change
@@ -57,10 +91,17 @@ namespace NoLandholdingApp
         private DataTable GetCertificationData()
         {
             DataTable dt = new DataTable();
-            string connectionString = "Server=localhost;Database=CertificationDB;Uid=root;Pwd=;";
+            // Load database configuration
+            var config = ConfigHelper.LoadConfig();
+            string connectionString = ""; // Declare outside
+
+            if (config.Count > 0)
+            {
+                connectionString = $"Server={config["Server"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+            }
 
             // Fetch only the latest record based on the highest ID (newest entry)
-            string query = "SELECT MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime " +
+            string query = "SELECT MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued " +
                            "FROM certificationrecords_nolandholding " +
                            "ORDER BY ID DESC LIMIT 1";  // Order by ID to get the latest
 
@@ -86,12 +127,170 @@ namespace NoLandholdingApp
             return dt;
         }
 
+        private DataGridView dataGridViewResults;
 
         public formInput()
         {
             InitializeComponent();
-            txtSearch.KeyDown += txtSearch_KeyDown;
 
+            SetFormProperties();
+            SetUpPanel();
+            SetTextBoxCharacterCasing();
+            InitializePrintDocument();
+            AttachEventHandlers();
+
+            this.KeyPreview = true;
+            // Subscribe to KeyDown event
+            this.KeyDown += new KeyEventHandler(DatabaseReload_KeyDown);
+
+            LoadDatabase();
+        }
+
+        private void SetFormProperties()
+        {
+            this.BackColor = ColorTranslator.FromHtml("#e8e8e2");
+            this.Icon = Properties.Resources.logo;
+        }
+
+        private void SetUpPanel()
+        {
+            Panel panel = new Panel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 650,
+                Margin = new Padding(20),
+                Padding = new Padding(40, 0, 40, 74)
+            };
+
+            // Add the DataGridView to the Panel
+            SetUpDataGridView();
+            panel.Controls.Add(dataGridViewResults);
+            // Add the Panel to the form
+            this.Controls.Add(panel);
+        }
+
+        private void SetUpDataGridView()
+        {
+            // Create and set up the DataGridView
+            dataGridViewResults = new DataGridView
+            {
+                Dock = DockStyle.Fill,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                Font = new Font("Tahoma", 8),
+                EnableHeadersVisualStyles = false,
+                AllowUserToAddRows = false,
+                AllowUserToDeleteRows = false,
+                AllowUserToResizeRows = false,
+                AllowUserToResizeColumns = false,
+                ContextMenuStrip = new ContextMenuStrip(),
+                GridColor = ColorTranslator.FromHtml("#CCCCCC"),
+                ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
+                ColumnHeadersDefaultCellStyle =
+                {
+                    SelectionBackColor = ColorTranslator.FromHtml("#F0F0F0"), // Prevent header highlight
+                    BackColor = ColorTranslator.FromHtml("#F0F0F0") // Set a consistent header color
+                }
+            };
+
+            // Set alternating row colors and default row colors
+            dataGridViewResults.ReadOnly = true;
+            // Set alternating row colors
+            dataGridViewResults.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(235, 240, 244); // #EBF0F4
+            dataGridViewResults.RowsDefaultCellStyle.BackColor = Color.White;
+
+            // Enable full-row selection
+            dataGridViewResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            // Define default selection colors (for entire rows)
+            dataGridViewResults.DefaultCellStyle.SelectionBackColor = Color.DodgerBlue; // Default blue highlight
+            dataGridViewResults.DefaultCellStyle.SelectionForeColor = Color.White;
+            dataGridViewResults.RowHeadersDefaultCellStyle.SelectionBackColor = Color.DodgerBlue;
+            dataGridViewResults.RowHeadersDefaultCellStyle.SelectionForeColor = Color.Tan; // Ensure the text is visible
+            dataGridViewResults.RowTemplate.Height = 19;
+
+            // Attach events
+            dataGridViewResults.CellMouseDown += dataGridViewResults_CellMouseDown;
+            dataGridViewResults.CellFormatting += dataGridViewResults_CellFormatting;
+
+            // Set up appearance properties
+            dataGridViewResults.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            //dataGridViewResults.RowHeadersVisible = false;
+            dataGridViewResults.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+
+            dataGridViewResults.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+
+            // Set column headers style
+            dataGridViewResults.ColumnHeadersDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#F0F0F0");
+
+
+            // Enable double-buffering
+            dataGridViewResults.GetType().InvokeMember("DoubleBuffered",
+                System.Reflection.BindingFlags.NonPublic |
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.SetProperty,
+                null, dataGridViewResults, new object[] { true });
+
+            // Column separator custom painting
+            dataGridViewResults.CellPainting += (sender, e) =>
+            {
+                if (e.RowIndex == -1) // Header row
+                {
+                    e.PaintBackground(e.CellBounds, true);
+
+                    // Draw the right separator for column headers (already existing)
+                    int separatorTop = e.CellBounds.Top + 4;
+                    int separatorBottom = e.CellBounds.Bottom - 4;
+
+                    using (Pen pen = new Pen(ColorTranslator.FromHtml("#cccccc"), 1))
+                    {
+                        e.Graphics.DrawLine(pen, e.CellBounds.Right - 1, separatorTop, e.CellBounds.Right - 1, separatorBottom);
+                    }
+
+                    // Draw the bottom border for the column header
+                    int bottomBorderY = e.CellBounds.Bottom - 1;  // Position just below the header
+                    using (Pen bottomPen = new Pen(ColorTranslator.FromHtml("#cccccc"), 1)) // Customize color here
+                    {
+                        e.Graphics.DrawLine(bottomPen, e.CellBounds.Left, bottomBorderY, e.CellBounds.Right, bottomBorderY);
+                    }
+
+                    e.PaintContent(e.CellBounds);
+                    e.Handled = true;
+                }
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0) // Ensure it's a valid cell
+                {
+                    // Default painting
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+
+                    // If it's the last clicked cell, draw a broken (dashed) outline
+                    if (e.RowIndex == _lastClickedRow && e.ColumnIndex == _lastClickedCol)
+                    {
+                        using (Pen dashedPen = new Pen(Color.FromArgb(150, 0, 0, 0), 1))
+                        {
+                            dashedPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash; // Broken outline
+                            e.Graphics.DrawRectangle(dashedPen, e.CellBounds.X, e.CellBounds.Y,
+                                e.CellBounds.Width - 1, e.CellBounds.Height - 1);
+                        }
+                    }
+
+                    e.Handled = true; // Mark the event as handled
+                }
+            };
+
+            // Persistent border for the DataGridView
+            dataGridViewResults.Paint += (sender, e) =>
+            {
+                using (Pen borderPen = new Pen(ColorTranslator.FromHtml("#cccccc"), 1))
+                {
+                    e.Graphics.DrawRectangle(borderPen, 0, 0, dataGridViewResults.Width - 1, dataGridViewResults.Height - 1);
+                }
+            };
+
+            // Handle resizing events
+            dataGridViewResults.Resize += (sender, e) => dataGridViewResults.Invalidate();
+        }
+
+        private void SetTextBoxCharacterCasing()
+        {
             // Set CharacterCasing for all TextBox controls
             txtParentGuardian.CharacterCasing = CharacterCasing.Upper;
             txtParentGuardian2.CharacterCasing = CharacterCasing.Upper;
@@ -99,34 +298,278 @@ namespace NoLandholdingApp
             txtPatientStudent.CharacterCasing = CharacterCasing.Upper;
             txtHospital.CharacterCasing = CharacterCasing.Upper;
             txtHospitalAddress.CharacterCasing = CharacterCasing.Upper;
-
-            txtOthersEditor.Visible = false;
-
-            // Initialize PrintDocument
-            printDocument = new PrintDocument();
-            printDocument.PrintPage += PrintDocument_PrintPage;
-
-            currentPage = 1;
-            scaleFactor = 1.0f; // Default scale factor
-
-            // Attach event handlers to ensure only one checkbox is checked at a time
-            checkBoxSingle.CheckedChanged += checkBoxSingle_CheckedChanged;
-            checkBoxMarried.CheckedChanged += checkBoxMarried_CheckedChanged;
+            txtAmountPaid.Text = "₱0.00";
         }
 
+        private void InitializePrintDocument()
+        {
+            printDocument = new PrintDocument();
+            printDocument.PrintPage += PrintDocument_PrintPage;
+            currentPage = 1;
+            scaleFactor = 1.0f; // Default scale factor
+        }
+
+        private void AttachEventHandlers()
+        {
+            // Attach event handlers for form controls
+            checkBoxSingle.CheckedChanged += checkBoxSingle_CheckedChanged;
+            checkBoxMarried.CheckedChanged += checkBoxMarried_CheckedChanged;
+            SearchBox();
+            txtSearch.KeyDown += SearchBox_KeyDown;
+            txtAmountPaid.Enter += txtAmountPaid_Enter;
+            txtAmountPaid.KeyPress += txtAmountPaid_KeyPress;
+            txtAmountPaid.Leave += txtAmountPaid_Leave;
+            dataGridViewResults.KeyDown += dataGridViewResults_KeyDown;
+            dataGridViewResults.CellDoubleClick += dataGridViewResults_CellDoubleClick;
+        }
+
+        private int _lastClickedRow = -1;
+        private int _lastClickedCol = -1;
+
+        private void dataGridViewResults_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && e.Button == MouseButtons.Left)
+            {
+                _lastClickedRow = e.RowIndex;
+                _lastClickedCol = e.ColumnIndex;
+                dataGridViewResults.Invalidate(); // Refresh to apply formatting
+            }
+        }
+
+        private void dataGridViewResults_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            // Apply alternating row colors
+            if (e.RowIndex % 2 == 0)
+            {
+                e.CellStyle.BackColor = Color.White;
+            }
+            else
+            {
+                e.CellStyle.BackColor = Color.FromArgb(235, 240, 244); // #EBF0F4
+            }
+
+            // Check if this is the last clicked cell
+            if (e.RowIndex == _lastClickedRow && e.ColumnIndex == _lastClickedCol)
+            {
+                // Override both BackColor and SelectionBackColor for the clicked cell
+                e.CellStyle.BackColor = Color.LightYellow;
+                e.CellStyle.SelectionBackColor = Color.LightYellow;
+
+                // Set text color to black to keep it readable
+                e.CellStyle.ForeColor = Color.Black;
+                e.CellStyle.SelectionForeColor = Color.Black;  // Ensure selection keeps black text
+            }
+            else
+            {
+                e.CellStyle.ForeColor = Color.Black;
+            }
+        }
+
+        public void LoadDatabase()
+        {
+
+            // Call the method to fetch data when the form loads
+            string searchTerm = ""; // Empty or default search term
+            DataTable reportData = GetReportData(searchTerm);
+
+            // Bind the fetched data to the DataGridView
+            dataGridViewResults.DataSource = reportData;
+        }
+
+        private void LoadDataFromDatabase()
+        {
+            // Fetch the filtered data (you can use an empty search term or adjust as needed)
+            string searchTerm = string.Empty; // Or provide a specific search term if required
+            DataTable reportData = GetReportData(searchTerm);
+
+            // Check if any results were found
+            if (reportData.Rows.Count > 0)
+            {
+                // Set the DataGridView's data source to display the results
+                dataGridViewResults.DataSource = reportData;
+            }
+            else
+            {
+                MessageBox.Show("No results found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtSearch.Focus();
+            }
+        }
+
+
+        // Event handler for double-clicking a row in the DataGridView
+        private void dataGridViewResults_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                // Get the selected row
+                DataGridViewRow selectedRow = ((DataGridView)sender).Rows[e.RowIndex];
+
+                // Extract necessary data from the selected row
+                string maritalstatus = selectedRow.Cells["Marital Status"].Value.ToString();
+                string parentguardian = selectedRow.Cells["Parent / Guardian"].Value.ToString();
+                string patient = selectedRow.Cells["Patient"].Value.ToString();
+                string hospital = selectedRow.Cells["Hospital"].Value.ToString();
+                string hospitaladdress = selectedRow.Cells["Hospital Address"].Value.ToString();
+                string barangay = selectedRow.Cells["Barangay"].Value.ToString();
+                DateTime certificationDate = selectedRow.Cells["Certification Date"].Value != DBNull.Value
+                    ? Convert.ToDateTime(selectedRow.Cells["Certification Date"].Value)
+                    : DateTime.MinValue;
+
+                DateTime certificationTime = selectedRow.Cells["Certification Time"].Value != DBNull.Value
+                    ? Convert.ToDateTime(selectedRow.Cells["Certification Time"].Value)
+                    : DateTime.MinValue;
+
+                string amountPaid = selectedRow.Cells["Amount Paid"].Value.ToString();
+                string receiptNo = selectedRow.Cells["Receipt No"].Value.ToString();
+                string receiptDateIssued = selectedRow.Cells["Receipt Date Issued"].Value.ToString();
+                string placeIssued = selectedRow.Cells["Place Issued"].Value.ToString();
+
+                // Format the date and time before passing to the report
+                string formattedDate = certificationDate.ToString("MM-dd-yyyy"); // Formatting Date
+                string formattedTime = certificationTime.ToString("hh:mm tt"); // Formatting Time to 12-hour format
+
+                // Pass the selected data to the report form and show it
+                DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued);
+                SearchResultReportForm reportForm = new SearchResultReportForm(selectedData);
+                reportForm.ShowDialog();
+            }
+        }
+
+        // Trigger for the Enter key to open the report form (without moving to the next row)
+        private void dataGridViewResults_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Check if the Enter key was pressed
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Prevent the default behavior of Enter key (which moves focus to the next row)
+                e.Handled = true;
+
+                // Ensure there's a selected row. Here we get the row focused (even if it's not fully selected)
+                DataGridViewRow selectedRow = ((DataGridView)sender).CurrentRow;
+
+                if (selectedRow != null)
+                {
+                    // Extract necessary data from the selected row
+                    string maritalstatus = selectedRow.Cells["Marital Status"].Value.ToString();
+                    string parentguardian = selectedRow.Cells["Parent / Guardian"].Value.ToString();
+                    string patient = selectedRow.Cells["Patient"].Value.ToString();
+                    string hospital = selectedRow.Cells["Hospital"].Value.ToString();
+                    string hospitaladdress = selectedRow.Cells["Hospital Address"].Value.ToString();
+                    string barangay = selectedRow.Cells["Barangay"].Value.ToString();
+                    DateTime certificationDate = selectedRow.Cells["Certification Date"].Value != DBNull.Value
+                        ? Convert.ToDateTime(selectedRow.Cells["Certification Date"].Value)
+                        : DateTime.MinValue;
+
+                    DateTime certificationTime = selectedRow.Cells["Certification Time"].Value != DBNull.Value
+                        ? Convert.ToDateTime(selectedRow.Cells["Certification Time"].Value)
+                        : DateTime.MinValue;
+
+                    string amountPaid = selectedRow.Cells["Amount Paid"].Value.ToString();
+                    string receiptNo = selectedRow.Cells["Receipt No"].Value.ToString();
+                    string receiptDateIssued = selectedRow.Cells["Receipt Date Issued"].Value.ToString();
+                    string placeIssued = selectedRow.Cells["Place Issued"].Value.ToString();
+
+                    // Format the date and time before passing to the report
+                    string formattedDate = certificationDate.ToString("MM-dd-yyyy"); // Formatting Date
+                    string formattedTime = certificationTime.ToString("hh:mm tt"); // Formatting Time to 12-hour format
+
+                    // Pass the selected data to the report form and show it
+                    DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued);
+                    SearchResultReportForm reportForm = new SearchResultReportForm(selectedData);
+                    reportForm.ShowDialog();
+                }
+            }
+        }
+
+        // Method to get selected data (same logic as in SearchResultsForm)
+        private DataTable GetSelectedData(string maritalstatus, string parentguardian, string patient, string hospital, string hospitaladdress, string barangay, string certificationDate, string certificationTime, string amountPaid, string receiptNo, string receiptDateIssued, string placeIssued)
+        {
+            DataTable selectedData = new DataTable();
+            selectedData.Columns.Add("MaritalStatus");
+            selectedData.Columns.Add("ParentGuardian");
+            selectedData.Columns.Add("Patient");
+            selectedData.Columns.Add("Hospital");
+            selectedData.Columns.Add("HospitalAddress");
+            selectedData.Columns.Add("Barangay");
+            selectedData.Columns.Add("CertificationDate");
+            selectedData.Columns.Add("CertificationTime");
+            selectedData.Columns.Add("AmountPaid");
+            selectedData.Columns.Add("ReceiptNo");
+            selectedData.Columns.Add("ReceiptDateIssued");
+            selectedData.Columns.Add("PlaceIssued");
+
+            // Add the selected row data into the DataTable
+            selectedData.Rows.Add(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, certificationDate, certificationTime, amountPaid, receiptNo, receiptDateIssued, placeIssued);
+
+            return selectedData;
+        }
+
+        private void txtAmountPaid_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Allow only numbers, backspace, and a single decimal point
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+            {
+                e.Handled = true;
+            }
+
+            // Prevent multiple decimal points
+            if (e.KeyChar == '.' && txtAmountPaid.Text.Contains("."))
+            {
+                e.Handled = true;
+            }
+
+            // Prevent the user from deleting the peso sign (₱) by backspace
+            if (txtAmountPaid.Text.Length == 1 && e.KeyChar == '\b') // Only allow backspace if length > 1
+            {
+                e.Handled = true; // Don't let the user backspace if the text is just "₱"
+            }
+        }
+
+        private void txtAmountPaid_Enter(object sender, EventArgs e)
+        {
+            // Remove amount part only if it's the default value but keep the peso sign
+            if (txtAmountPaid.Text == "₱0.00")
+            {
+                txtAmountPaid.Text = "₱";  // Set to "₱" only, so user can start typing after it
+                txtAmountPaid.SelectionStart = txtAmountPaid.Text.Length;  // Place cursor at the end
+            }
+        }
+
+        private void txtAmountPaid_Leave(object sender, EventArgs e)
+        {
+            string input = txtAmountPaid.Text.Replace("₱", "").Trim(); // Remove peso sign before parsing
+
+            if (decimal.TryParse(input, out decimal parsedAmount))
+            {
+                // Re-add the peso sign and format with two decimal places
+                txtAmountPaid.Text = $"₱{parsedAmount:F2}";
+            }
+            else
+            {
+                // Default value if input is invalid, keeping the peso sign intact
+                txtAmountPaid.Text = "₱0.00";
+            }
+        }
 
         private void btnPrintSave_Click(object sender, EventArgs e)
         {
             // Collect form data
-            string maritalStatus = checkBoxSingle.Checked ? "" : "SPOUSES";
+            string maritalStatus = checkBoxSingle.Checked ? "SINGLE" : "MARRIED";
             string parentGuardian = txtParentGuardian.Text;
             string parentGuardian2 = txtParentGuardian2.Text;
             string barangay = txtAddress.Text;
             string patient = txtPatientStudent.Text;
             string hospital = txtHospital.Text;
             string hospitalAddress = txtHospitalAddress.Text;
-            DateTime certificationDate = DateTime.Now;
-            TimeSpan certificationTime = DateTime.Now.TimeOfDay;  // Use TimeSpan for only the time part
+            string certificationDate = DateTime.Now.ToString("MM-dd-yyyy");  // "2025-02-11"
+            string certificationTime = DateTime.Now.ToString("hh:mm tt", CultureInfo.InvariantCulture);
+            string amountpaid = txtAmountPaid.Text;
+            string receiptno = txtReceiptNo.Text;
+            string receiptdateissued = dateTimePickerDateIssued.Value.ToString("MM-dd-yyyy");
+            string placeissued = txtPlaceIssued.Text;
+
 
             // Combine parent guardians with "AND" if both are filled, otherwise use the non-empty one
             string combinedParentGuardian = string.Empty;
@@ -143,11 +586,18 @@ namespace NoLandholdingApp
             }
 
             // MySQL connection string
-            string connectionString = "Server=localhost;Database=CertificationDB;Uid=root;Pwd=;";
+            // Load database configuration
+            var config = ConfigHelper.LoadConfig();
+            string connectionString = ""; // Declare outside
+
+            if (config.Count > 0)
+            {
+                connectionString = $"Server={config["Server"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+            }
 
             // Insert query
-            string query = "INSERT INTO certificationrecords_nolandholding (MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime) " +
-                           "VALUES (@MaritalStatus, @ParentGuardian, @ParentGuardian2, @Barangay, @Patient, @Hospital, @HospitalAddress, @CertificationDate, @CertificationTime)";
+            string query = "INSERT INTO certificationrecords_nolandholding (MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued) " +
+                           "VALUES (@MaritalStatus, @ParentGuardian, @ParentGuardian2, @Barangay, @Patient, @Hospital, @HospitalAddress, @CertificationDate, @CertificationTime, @AmountPaid, @ReceiptNo, @ReceiptDateIssued, @PlaceIssued)";
 
             try
             {
@@ -166,6 +616,21 @@ namespace NoLandholdingApp
                         cmd.Parameters.AddWithValue("@HospitalAddress", hospitalAddress);
                         cmd.Parameters.AddWithValue("@CertificationDate", certificationDate);
                         cmd.Parameters.AddWithValue("@CertificationTime", certificationTime);  // Add the TimeSpan parameter directly
+                        cmd.Parameters.AddWithValue("@AmountPaid", amountpaid);
+                        // Only add ReceiptDateIssued if AmountPaid is greater than ₱0.00
+                        if (amountpaid != "₱0.00")
+                        {
+                            cmd.Parameters.AddWithValue("@ReceiptNo", receiptno);
+                            cmd.Parameters.AddWithValue("@ReceiptDateIssued", receiptdateissued);
+                            cmd.Parameters.AddWithValue("@PlaceIssued", placeissued);
+                        }
+                        else
+                        {
+                            // Prevent inserting the ReceiptDateIssued if the amount is zero
+                            cmd.Parameters.AddWithValue("@ReceiptNo", DBNull.Value);
+                            cmd.Parameters.AddWithValue("@ReceiptDateIssued", DBNull.Value);
+                            cmd.Parameters.AddWithValue("@PlaceIssued", DBNull.Value);
+                        }
 
                         cmd.ExecuteNonQuery();
                     }
@@ -173,6 +638,7 @@ namespace NoLandholdingApp
 
                 // Show success message
                 MessageBox.Show("Data Saved Successfully");
+                LoadDatabase();
 
                 // Fetch only the latest saved record for printing
                 DataTable reportData = GetCertificationData();  // This method must return the latest entry
@@ -191,7 +657,6 @@ namespace NoLandholdingApp
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
-
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -201,10 +666,7 @@ namespace NoLandholdingApp
 
         private void radioOthers_CheckedChanged(object sender, EventArgs e)
         {
-            txtOthersEditor.Visible = radioOthers.Checked;
-            txtOthersEditor.Height = 300;
-            txtOthersEditor.Multiline = true;
-            txtOthersEditor.ScrollBars = ScrollBars.Vertical;
+
         }
 
         private void btnPrint_Click(object sender, EventArgs e)
@@ -488,15 +950,136 @@ namespace NoLandholdingApp
 
         }
 
-        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private TextBox txtSearch;
+        private PictureBox picSearch;
+        private string placeholderText = "Enter search term...";
+
+        private void SearchBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && txtSearch.Focused)
             {
-                btnSearch_Click(sender, e );
+                PerformSearch(sender, e);
+                dataGridViewResults.Focus();
             }
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void SearchBox()
+        {
+            // Create the TextBox (Search Box)
+            txtSearch = new TextBox();
+            txtSearch.Size = new Size(200, 17);
+            txtSearch.Location = new Point(40, 285);
+            txtSearch.BorderStyle = BorderStyle.FixedSingle;
+
+            // Set placeholder initially
+            txtSearch.Text = placeholderText;
+            txtSearch.ForeColor = Color.Gray;
+
+            // Handle Focus Enter (Remove Placeholder only if text is not entered)
+            txtSearch.Enter += (s, e) =>
+            {
+                if (txtSearch.Text == placeholderText)
+                {
+                    txtSearch.Text = "";
+                    txtSearch.ForeColor = Color.Black;
+                }
+            };
+
+            // Handle Focus Leave (Restore placeholder if TextBox is empty)
+            txtSearch.Leave += (s, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(txtSearch.Text))
+                {
+                    // Restore the placeholder text when focus is lost and text is empty
+                    txtSearch.Text = placeholderText;
+                    txtSearch.ForeColor = Color.Gray;
+                }
+
+                // Explicitly make sure the TextBox loses focus
+                txtSearch.Parent.Focus();  // This forces the TextBox to lose focus
+            };
+
+            // Ensure the placeholder is visible if no text has been entered and TextBox is clicked
+            txtSearch.TextChanged += (s, e) =>
+            {
+                if (!string.IsNullOrWhiteSpace(txtSearch.Text))
+                {
+                    // Once the user starts typing, the placeholder text is removed
+                    txtSearch.ForeColor = Color.Black;
+                }
+                else
+                {
+                    // If the text is empty, show the placeholder text again
+                    txtSearch.ForeColor = Color.Gray;
+                }
+            };
+
+            // Create the PictureBox (Magnifying Glass)
+            picSearch = new PictureBox();
+            picSearch.Size = new Size(17, 17);
+            picSearch.Location = new Point(txtSearch.Width - 20, txtSearch.Top - 283); // Position inside TextBox
+            picSearch.SizeMode = PictureBoxSizeMode.StretchImage;
+            picSearch.BackColor = Color.Transparent; // Ensure no background
+
+            picSearch.Image = Properties.Resources.magnifier; // Default image
+
+            // Add hover effect
+            picSearch.MouseEnter += (s, e) =>
+            {
+                picSearch.Image = Properties.Resources.magnifier_hover;
+                picSearch.Cursor = Cursors.Default; // Change cursor for better UX
+            };
+
+            picSearch.MouseLeave += (s, e) =>
+            {
+                picSearch.Image = Properties.Resources.magnifier;
+                picSearch.Cursor = Cursors.Default; // Reset cursor
+            };
+
+            // Add click event to perform search and highlight TextBox
+            picSearch.Click += (s, e) =>
+            {
+                // Perform the search operation (for example)
+                string searchQuery = txtSearch.Text;
+
+                if (searchQuery != placeholderText && !string.IsNullOrWhiteSpace(searchQuery))
+                {
+                    // Perform search logic here (e.g., search the database or a list)
+                    MessageBox.Show($"Searching for: {searchQuery}");
+                }
+                else
+                {
+                    MessageBox.Show("Please enter a valid search term.");
+                }
+
+                // Highlight TextBox background color to pastel yellow
+                txtSearch.BackColor = Color.FromArgb(255, 255, 204); // Pastel yellow
+
+                // Optionally, reset highlight after a delay or upon certain conditions
+                Timer timer = new Timer();
+                timer.Interval = 2000; // Reset after 2 seconds (2000ms)
+                timer.Tick += (sender, args) =>
+                {
+                    txtSearch.BackColor = SystemColors.Window; // Reset to default background color
+                    timer.Stop(); // Stop the timer
+                };
+                timer.Start();
+            };
+
+            // Ensure PictureBox stays inside TextBox
+            txtSearch.Controls.Add(picSearch);
+            picSearch.BringToFront();
+
+            // Add to form
+            this.Controls.Add(txtSearch);
+        }
+
+        private void PerformSearch(object sender, EventArgs e)
         {
             // Get the search term entered by the user
             string searchTerm = txtSearch.Text.Trim();
@@ -507,15 +1090,28 @@ namespace NoLandholdingApp
             // Check if any results were found
             if (reportData.Rows.Count > 0)
             {
-                // Show the search results in a new form
-                SearchResultsForm searchResultsForm = new SearchResultsForm(reportData);
-                searchResultsForm.ShowDialog();
+                // Populate the DataGridView in the current form with the results
+                dataGridViewResults.DataSource = reportData;
             }
             else
             {
                 MessageBox.Show("No results found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
+            // Highlight the TextBox background color to pastel yellow
+            txtSearch.BackColor = Color.FromArgb(255, 255, 204);
+
+            // Reset highlight after 2 seconds
+            Timer timer = new Timer();
+            timer.Interval = 2000;
+            timer.Tick += (object timerSender, EventArgs timerArgs) =>
+            {
+                txtSearch.BackColor = SystemColors.Window;  // Reset to default background color
+                timer.Stop();  // Stop the timer
+            };
+            timer.Start();
         }
+
 
         private DataTable GetReportData(string searchTerm)
         {
@@ -524,17 +1120,33 @@ namespace NoLandholdingApp
 
             // Add columns to the DataTable
             dt.Columns.Add("Patient");
+            dt.Columns.Add("MaritalStatus");
+            dt.Columns.Add("ParentGuardian");
             dt.Columns.Add("Hospital");
+            dt.Columns.Add("HospitalAddress");
             dt.Columns.Add("Barangay");
             dt.Columns.Add("CertificationDate");
             dt.Columns.Add("CertificationTime");
+            dt.Columns.Add("AmountPaid");
+            dt.Columns.Add("ReceiptNo");
+            dt.Columns.Add("ReceiptDateIssued");
+            dt.Columns.Add("PlaceIssued");
 
-            // MySQL connection string
-            string connectionString = "Server=localhost;Database=CertificationDB;Uid=root;Pwd=;";
+            // Load database configuration
+            var config = ConfigHelper.LoadConfig();
+            string connectionString = ""; // Declare outside
+
+            if (config.Count > 0)
+            {
+                connectionString = $"Server={config["Server"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+            }
+
 
             // SQL query to fetch data based on the search term
-            string query = "SELECT Patient, Hospital, Barangay, CertificationDate, CertificationTime FROM certificationrecords_nolandholding " +
-                           "WHERE Patient LIKE @SearchTerm";
+            string query = "SELECT MaritalStatus, ParentGuardian, Patient, Hospital, HospitalAddress, Barangay, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued " +
+                           "FROM certificationrecords_nolandholding " +
+                           "WHERE Patient LIKE @SearchTerm " +
+                           "ORDER BY CertificationDate DESC, STR_TO_DATE(CertificationTime, '%h:%i %p') DESC";  // Use DESC for descending order
 
             try
             {
@@ -558,15 +1170,105 @@ namespace NoLandholdingApp
                         }
                     }
                 }
+
+                // Format the column headers with spaces (if needed)
+                FormatColumnHeaders(dt);
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
+                DatabaseSetup dbSetup = new DatabaseSetup();
+                dbSetup.FormClosing += (s, args) => dbSetup.Hide(); // Prevent disposal
+                dbSetup.ShowDialog();
             }
 
             // Return the populated DataTable
             return dt;
+
         }
 
+        // Helper function to format column names
+        private void FormatColumnHeaders(DataTable dt)
+        {
+            foreach (DataColumn column in dt.Columns)
+            {
+                column.ColumnName = FormatColumnName(column.ColumnName);
+            }
+        }
+
+        // Helper function to add space between camelCase words
+        private string FormatColumnName(string columnName)
+        {
+            if (columnName == "ParentGuardian")
+            {
+                return "Parent / Guardian";
+            }
+            var formattedName = System.Text.RegularExpressions.Regex.Replace(
+                columnName,
+                "([a-z])([A-Z])",
+                "$1 $2"
+            );
+            return formattedName;
+        }
+
+        // Handle the KeyDown event
+        private void DatabaseReload_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F5)  // Check if F5 was pressed
+            {
+                // Call ReloadData to refresh the data
+                LoadDatabase();
+            }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labelParentGuardian_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labelParentGuardian2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void maskedTextBoxDate_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
+
+        private void formInput_Load(object sender, EventArgs e)
+        {
+            this.KeyPreview = true;
+            // Subscribe to KeyDown event
+            this.KeyDown += new KeyEventHandler(DatabaseReload_KeyDown);
+        }
+
+        private void toolStripLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void preferenceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Pass the reference of formInput if opened from preferences, else null
+            SettingsForm settingsForm = new SettingsForm(); // Pass 'this' (formInput) reference
+            settingsForm.ShowDialog();
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadDatabase();
+        }
+
+        private void shutdownToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

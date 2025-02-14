@@ -21,6 +21,7 @@ namespace NoLandholdingApp
 
             // Ensure that the DataGridView can capture key events
             dataGridViewResults.KeyDown += dataGridViewResults_KeyDown;
+            this.Icon = Properties.Resources.logo;
         }
 
         // Event handler for double-clicking a row in the DataGridView
@@ -32,8 +33,11 @@ namespace NoLandholdingApp
                 DataGridViewRow selectedRow = dataGridViewResults.Rows[e.RowIndex];
 
                 // Extract necessary data from the selected row
+                string maritalstatus = selectedRow.Cells["MaritalStatus"].Value.ToString();
+                string parentguardian = selectedRow.Cells["ParentGuardian"].Value.ToString();
                 string patient = selectedRow.Cells["Patient"].Value.ToString();
                 string hospital = selectedRow.Cells["Hospital"].Value.ToString();
+                string hospitaladdress = selectedRow.Cells["HospitalAddress"].Value.ToString();
                 string barangay = selectedRow.Cells["Barangay"].Value.ToString();
                 DateTime certificationDate = selectedRow.Cells["CertificationDate"].Value != DBNull.Value
                     ? Convert.ToDateTime(selectedRow.Cells["CertificationDate"].Value)
@@ -43,12 +47,17 @@ namespace NoLandholdingApp
                     ? Convert.ToDateTime(selectedRow.Cells["CertificationTime"].Value)
                     : DateTime.MinValue;
 
+                string amountPaid = selectedRow.Cells["AmountPaid"].Value.ToString();
+                string receiptNo = selectedRow.Cells["ReceiptNo"].Value.ToString();
+                string receiptDateIssued = selectedRow.Cells["ReceiptDateIssued"].Value.ToString();
+                string placeIssued = selectedRow.Cells["PlaceIssued"].Value.ToString();
+
                 // Format the date and time before passing to the report
                 string formattedDate = certificationDate.ToString("yyyy-MM-dd"); // Formatting Date
                 string formattedTime = certificationTime.ToString("hh:mm tt"); // Formatting Time to 12-hour format
 
                 // Pass the selected data to the report form and show it
-                DataTable selectedData = GetSelectedData(patient, hospital, barangay, formattedDate, formattedTime);
+                DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued);
                 SearchResultReportForm reportForm = new SearchResultReportForm(selectedData);
                 reportForm.ShowDialog();
             }
@@ -69,8 +78,11 @@ namespace NoLandholdingApp
                 if (selectedRow != null)
                 {
                     // Extract necessary data from the selected row
+                    string maritalstatus = selectedRow.Cells["MaritalStatus"].Value.ToString();
+                    string parentguardian = selectedRow.Cells["ParentGuardian"].Value.ToString();
                     string patient = selectedRow.Cells["Patient"].Value.ToString();
                     string hospital = selectedRow.Cells["Hospital"].Value.ToString();
+                    string hospitaladdress = selectedRow.Cells["HospitalAddress"].Value.ToString();
                     string barangay = selectedRow.Cells["Barangay"].Value.ToString();
                     DateTime certificationDate = selectedRow.Cells["CertificationDate"].Value != DBNull.Value
                         ? Convert.ToDateTime(selectedRow.Cells["CertificationDate"].Value)
@@ -80,12 +92,17 @@ namespace NoLandholdingApp
                         ? Convert.ToDateTime(selectedRow.Cells["CertificationTime"].Value)
                         : DateTime.MinValue;
 
+                    string amountPaid = selectedRow.Cells["AmountPaid"].Value.ToString();
+                    string receiptNo = selectedRow.Cells["ReceiptNo"].Value.ToString();
+                    string receiptDateIssued = selectedRow.Cells["ReceiptDateIssued"].Value.ToString();
+                    string placeIssued = selectedRow.Cells["PlaceIssued"].Value.ToString();
+
                     // Format the date and time before passing to the report
                     string formattedDate = certificationDate.ToString("yyyy-MM-dd"); // Formatting Date
                     string formattedTime = certificationTime.ToString("hh:mm tt"); // Formatting Time to 12-hour format
 
                     // Pass the selected data to the report form and show it
-                    DataTable selectedData = GetSelectedData(patient, hospital, barangay, formattedDate, formattedTime);
+                    DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued);
                     SearchResultReportForm reportForm = new SearchResultReportForm(selectedData);
                     reportForm.ShowDialog();
                 }
@@ -93,17 +110,24 @@ namespace NoLandholdingApp
         }
 
         // Method to get selected data (already explained earlier)
-        private DataTable GetSelectedData(string patient, string hospital, string barangay, string certificationDate, string certificationTime)
+        private DataTable GetSelectedData(string maritalstatus, string parentguardian, string patient, string hospital, string hospitaladdress, string barangay, string certificationDate, string certificationTime, string amountPaid, string receiptNo, string receiptDateIssued, string placeIssued)
         {
             DataTable selectedData = new DataTable();
+            selectedData.Columns.Add("MaritalStatus");
+            selectedData.Columns.Add("ParentGuardian");
             selectedData.Columns.Add("Patient");
             selectedData.Columns.Add("Hospital");
+            selectedData.Columns.Add("HospitalAddress");
             selectedData.Columns.Add("Barangay");
             selectedData.Columns.Add("CertificationDate");
             selectedData.Columns.Add("CertificationTime");
+            selectedData.Columns.Add("AmountPaid");
+            selectedData.Columns.Add("ReceiptNo");
+            selectedData.Columns.Add("ReceiptDateIssued");
+            selectedData.Columns.Add("PlaceIssued");
 
             // Add the selected row data into the DataTable
-            selectedData.Rows.Add(patient, hospital, barangay, certificationDate, certificationTime);
+            selectedData.Rows.Add(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, certificationDate, certificationTime, amountPaid, receiptNo, receiptDateIssued, placeIssued);
 
             return selectedData;
         }

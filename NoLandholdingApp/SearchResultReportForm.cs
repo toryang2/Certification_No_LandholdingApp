@@ -19,6 +19,7 @@ namespace NoLandholdingApp
         {
             InitializeComponent();
             this.reportData = data;
+            this.Icon = Properties.Resources.logo;
         }
 
         private void SearchResultReportForm_Load(object sender, EventArgs e)

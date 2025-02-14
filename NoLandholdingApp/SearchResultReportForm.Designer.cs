@@ -47,7 +47,8 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.reportViewer1);
             this.Name = "SearchResultReportForm";
-            this.Text = "Form1";
+            this.Text = "Print Preview";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.SearchResultReportForm_Load);
             this.ResumeLayout(false);
 

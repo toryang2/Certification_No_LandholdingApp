@@ -297,6 +297,14 @@ namespace NoLandholdingApp {
             
             private global::System.Data.DataColumn columnCertificationTime;
             
+            private global::System.Data.DataColumn columnAmountPaid;
+            
+            private global::System.Data.DataColumn columnReceiptNo;
+            
+            private global::System.Data.DataColumn columnReceiptDateIssued;
+            
+            private global::System.Data.DataColumn columnPlaceIssued;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public noLandholding_DataSourceDataTable() {
@@ -404,6 +412,38 @@ namespace NoLandholdingApp {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn AmountPaidColumn {
+                get {
+                    return this.columnAmountPaid;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn ReceiptNoColumn {
+                get {
+                    return this.columnReceiptNo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn ReceiptDateIssuedColumn {
+                get {
+                    return this.columnReceiptDateIssued;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn PlaceIssuedColumn {
+                get {
+                    return this.columnPlaceIssued;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -439,7 +479,7 @@ namespace NoLandholdingApp {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public noLandholding_DataSourceRow AddnoLandholding_DataSourceRow(string MaritalStatus, string ParentGuardian, string ParentGuardian2, string Barangay, string Patient, string Hospital, string HospitalAddress, string CertificationDate, string CertificationTime) {
+            public noLandholding_DataSourceRow AddnoLandholding_DataSourceRow(string MaritalStatus, string ParentGuardian, string ParentGuardian2, string Barangay, string Patient, string Hospital, string HospitalAddress, string CertificationDate, string CertificationTime, string AmountPaid, string ReceiptNo, string ReceiptDateIssued, string PlaceIssued) {
                 noLandholding_DataSourceRow rownoLandholding_DataSourceRow = ((noLandholding_DataSourceRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         MaritalStatus,
@@ -450,7 +490,11 @@ namespace NoLandholdingApp {
                         Hospital,
                         HospitalAddress,
                         CertificationDate,
-                        CertificationTime};
+                        CertificationTime,
+                        AmountPaid,
+                        ReceiptNo,
+                        ReceiptDateIssued,
+                        PlaceIssued};
                 rownoLandholding_DataSourceRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rownoLandholding_DataSourceRow);
                 return rownoLandholding_DataSourceRow;
@@ -489,6 +533,10 @@ namespace NoLandholdingApp {
                 this.columnHospitalAddress = base.Columns["HospitalAddress"];
                 this.columnCertificationDate = base.Columns["CertificationDate"];
                 this.columnCertificationTime = base.Columns["CertificationTime"];
+                this.columnAmountPaid = base.Columns["AmountPaid"];
+                this.columnReceiptNo = base.Columns["ReceiptNo"];
+                this.columnReceiptDateIssued = base.Columns["ReceiptDateIssued"];
+                this.columnPlaceIssued = base.Columns["PlaceIssued"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -512,6 +560,14 @@ namespace NoLandholdingApp {
                 base.Columns.Add(this.columnCertificationDate);
                 this.columnCertificationTime = new global::System.Data.DataColumn("CertificationTime", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCertificationTime);
+                this.columnAmountPaid = new global::System.Data.DataColumn("AmountPaid", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAmountPaid);
+                this.columnReceiptNo = new global::System.Data.DataColumn("ReceiptNo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnReceiptNo);
+                this.columnReceiptDateIssued = new global::System.Data.DataColumn("ReceiptDateIssued", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnReceiptDateIssued);
+                this.columnPlaceIssued = new global::System.Data.DataColumn("PlaceIssued", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPlaceIssued);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnCertificationDate}, true));
                 this.columnPatient.AllowDBNull = false;
@@ -798,6 +854,72 @@ namespace NoLandholdingApp {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string AmountPaid {
+                get {
+                    try {
+                        return ((string)(this[this.tablenoLandholding_DataSource.AmountPaidColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'AmountPaid\' in table \'noLandholding_DataSource\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablenoLandholding_DataSource.AmountPaidColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string ReceiptNo {
+                get {
+                    try {
+                        return ((string)(this[this.tablenoLandholding_DataSource.ReceiptNoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ReceiptNo\' in table \'noLandholding_DataSource\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablenoLandholding_DataSource.ReceiptNoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string ReceiptDateIssued {
+                get {
+                    try {
+                        return ((string)(this[this.tablenoLandholding_DataSource.ReceiptDateIssuedColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ReceiptDateIssued\' in table \'noLandholding_DataSource\' is D" +
+                                "BNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablenoLandholding_DataSource.ReceiptDateIssuedColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string PlaceIssued {
+                get {
+                    try {
+                        return ((string)(this[this.tablenoLandholding_DataSource.PlaceIssuedColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'PlaceIssued\' in table \'noLandholding_DataSource\' is DBNull." +
+                                "", e);
+                    }
+                }
+                set {
+                    this[this.tablenoLandholding_DataSource.PlaceIssuedColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsMaritalStatusNull() {
                 return this.IsNull(this.tablenoLandholding_DataSource.MaritalStatusColumn);
             }
@@ -878,6 +1000,54 @@ namespace NoLandholdingApp {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetCertificationTimeNull() {
                 this[this.tablenoLandholding_DataSource.CertificationTimeColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsAmountPaidNull() {
+                return this.IsNull(this.tablenoLandholding_DataSource.AmountPaidColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetAmountPaidNull() {
+                this[this.tablenoLandholding_DataSource.AmountPaidColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsReceiptNoNull() {
+                return this.IsNull(this.tablenoLandholding_DataSource.ReceiptNoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetReceiptNoNull() {
+                this[this.tablenoLandholding_DataSource.ReceiptNoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsReceiptDateIssuedNull() {
+                return this.IsNull(this.tablenoLandholding_DataSource.ReceiptDateIssuedColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetReceiptDateIssuedNull() {
+                this[this.tablenoLandholding_DataSource.ReceiptDateIssuedColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsPlaceIssuedNull() {
+                return this.IsNull(this.tablenoLandholding_DataSource.PlaceIssuedColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetPlaceIssuedNull() {
+                this[this.tablenoLandholding_DataSource.PlaceIssuedColumn] = global::System.Convert.DBNull;
             }
         }
         
