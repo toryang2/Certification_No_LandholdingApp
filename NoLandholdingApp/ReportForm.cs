@@ -13,12 +13,14 @@ namespace NoLandholdingApp
 {
     public partial class ReportForm : Form
     {
+        private bool isSchoolRequirements;
         private DataTable reportData;
 
-        public ReportForm(DataTable data)
+        public ReportForm(bool isSchoolRequirements, DataTable data)
         {
             InitializeComponent();
             this.reportData = data;
+            this.isSchoolRequirements = isSchoolRequirements;
             this.Icon = Properties.Resources.logo;
         }
 
@@ -37,8 +39,12 @@ namespace NoLandholdingApp
                 return;
             }
 
-            // Set RDLC Report Path (ensure it's set as "Embedded Resource" in Properties)
-            reportViewer1.LocalReport.ReportEmbeddedResource = "NoLandholdingApp.CertificationReport.rdlc";
+            // Choose the correct RDLC file
+            string reportPath = isSchoolRequirements
+                ? "NoLandholdingApp.CertificationReport-SchoolRequirements.rdlc"
+                : "NoLandholdingApp.CertificationReport.rdlc";
+
+            reportViewer1.LocalReport.ReportEmbeddedResource = reportPath;
 
             // Clear previous data sources
             reportViewer1.LocalReport.DataSources.Clear();

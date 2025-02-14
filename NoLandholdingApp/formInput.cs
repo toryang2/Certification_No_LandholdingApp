@@ -650,7 +650,8 @@ namespace NoLandholdingApp
                 }
 
                 // Open the Report Form with the latest record
-                ReportForm reportForm = new ReportForm(reportData);
+                bool isSchoolRequirements = radioSchoolRequirements.Checked;
+                ReportForm reportForm = new ReportForm(isSchoolRequirements, reportData);
                 reportForm.ShowDialog();
             }
             catch (Exception ex)
