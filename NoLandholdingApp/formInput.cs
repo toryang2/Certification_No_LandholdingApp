@@ -322,8 +322,6 @@ namespace NoLandholdingApp
             dataGridViewResults.Columns["Type"].Width = 150;
         }
 
-
-
         private void SetTextBoxCharacterCasing()
         {
             // Set CharacterCasing for all TextBox controls
