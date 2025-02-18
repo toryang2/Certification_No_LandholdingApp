@@ -23,10 +23,7 @@ namespace NoLandholdingApp
 {
     public partial class formInput : Form
     {
-        private PrintDocument printDocument;
-        private int currentPage;
-        private float scaleFactor;
-
+        private PrintDocument printDocument; private int currentPage; private float scaleFactor;
 
         // Set default value on form load
         private void Form_Load(object sender, EventArgs e)
@@ -101,7 +98,7 @@ namespace NoLandholdingApp
             }
 
             // Fetch only the latest record based on the highest ID (newest entry)
-            string query = "SELECT MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued " +
+            string query = "SELECT MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type " +
                            "FROM certificationrecords_nolandholding " +
                            "ORDER BY ID DESC LIMIT 1";  // Order by ID to get the latest
 
@@ -139,9 +136,12 @@ namespace NoLandholdingApp
             InitializePrintDocument();
             AttachEventHandlers();
 
+
             this.KeyPreview = true;
             // Subscribe to KeyDown event
             this.KeyDown += new KeyEventHandler(DatabaseReload_KeyDown);
+
+            txtSearch.BringToFront();
 
             LoadDatabase();
         }
@@ -169,16 +169,28 @@ namespace NoLandholdingApp
             this.Controls.Add(panel);
         }
 
+        private void dataGridViewResults_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.None;
+        }
+
+        private void dataGridViewResults_MouseDown(object sender, MouseEventArgs e)
+        {
+            dataGridViewResults.ClearSelection();
+        }
+
         private void SetUpDataGridView()
         {
             // Create and set up the DataGridView
             dataGridViewResults = new DataGridView
             {
                 Dock = DockStyle.Fill,
-                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None,
                 Font = new Font("Tahoma", 8),
                 EnableHeadersVisualStyles = false,
                 AllowUserToAddRows = false,
+                AllowDrop = false,
+                AllowUserToOrderColumns = false,
                 AllowUserToDeleteRows = false,
                 AllowUserToResizeRows = false,
                 AllowUserToResizeColumns = false,
@@ -186,10 +198,10 @@ namespace NoLandholdingApp
                 GridColor = ColorTranslator.FromHtml("#CCCCCC"),
                 ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
                 ColumnHeadersDefaultCellStyle =
-                {
-                    SelectionBackColor = ColorTranslator.FromHtml("#F0F0F0"), // Prevent header highlight
-                    BackColor = ColorTranslator.FromHtml("#F0F0F0") // Set a consistent header color
-                }
+            {
+                SelectionBackColor = ColorTranslator.FromHtml("#F0F0F0"), // Prevent header highlight
+                BackColor = ColorTranslator.FromHtml("#F0F0F0") // Set a consistent header color
+            }
             };
 
             // Set alternating row colors and default row colors
@@ -211,6 +223,8 @@ namespace NoLandholdingApp
             // Attach events
             dataGridViewResults.CellMouseDown += dataGridViewResults_CellMouseDown;
             dataGridViewResults.CellFormatting += dataGridViewResults_CellFormatting;
+            dataGridViewResults.DragOver += dataGridViewResults_DragOver;
+            dataGridViewResults.MouseDown += dataGridViewResults_MouseDown;
 
             // Set up appearance properties
             dataGridViewResults.CellBorderStyle = DataGridViewCellBorderStyle.None;
@@ -289,6 +303,27 @@ namespace NoLandholdingApp
             dataGridViewResults.Resize += (sender, e) => dataGridViewResults.Invalidate();
         }
 
+        private void ResizeDataGridViewColumns()
+        {
+            if (dataGridViewResults.Columns.Count == 0) return;
+
+            dataGridViewResults.Columns["Patient"].Width = 200;
+            dataGridViewResults.Columns["Marital Status"].Width = 100;
+            dataGridViewResults.Columns["Parent / Guardian"].Width = 250;
+            dataGridViewResults.Columns["Hospital"].Width = 250;
+            dataGridViewResults.Columns["Hospital Address"].Width = 250;
+            dataGridViewResults.Columns["Barangay"].Width = 250;
+            dataGridViewResults.Columns["Certification Date"].Width = 100;
+            dataGridViewResults.Columns["Certification Time"].Width = 100;
+            dataGridViewResults.Columns["Amount Paid"].Width = 80;
+            dataGridViewResults.Columns["Receipt No"].Width = 100;
+            dataGridViewResults.Columns["Receipt Date Issued"].Width = 120;
+            dataGridViewResults.Columns["Place Issued"].Width = 140;
+            dataGridViewResults.Columns["Type"].Width = 150;
+        }
+
+
+
         private void SetTextBoxCharacterCasing()
         {
             // Set CharacterCasing for all TextBox controls
@@ -321,6 +356,10 @@ namespace NoLandholdingApp
             txtAmountPaid.Leave += txtAmountPaid_Leave;
             dataGridViewResults.KeyDown += dataGridViewResults_KeyDown;
             dataGridViewResults.CellDoubleClick += dataGridViewResults_CellDoubleClick;
+            dataGridViewResults.DragOver += dataGridViewResults_DragOver;
+            dataGridViewResults.MouseDown += dataGridViewResults_MouseDown;
+            comboBoxTypeList.DropDownStyle = ComboBoxStyle.DropDownList;
+            LoadComboBoxItemsFromMySQL();
         }
 
         private int _lastClickedRow = -1;
@@ -376,6 +415,7 @@ namespace NoLandholdingApp
 
             // Bind the fetched data to the DataGridView
             dataGridViewResults.DataSource = reportData;
+            ResizeDataGridViewColumns();
         }
 
         private void LoadDataFromDatabase()
@@ -428,11 +468,12 @@ namespace NoLandholdingApp
 
                 // Format the date and time before passing to the report
                 string formattedDate = certificationDate.ToString("MM-dd-yyyy"); // Formatting Date
-                string formattedTime = certificationTime.ToString("hh:mm tt"); // Formatting Time to 12-hour format
+                string formattedTime = certificationTime.ToString("hh:mm:ss tt"); // Formatting Time to 12-hour format
+                string typeset = selectedRow.Cells["Type"].Value.ToString();
 
                 // Pass the selected data to the report form and show it
-                DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued);
-                SearchResultReportForm reportForm = new SearchResultReportForm(selectedData);
+                DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued, typeset);
+                SearchResultReportForm reportForm = new SearchResultReportForm(selectedData, typeset);
                 reportForm.ShowDialog();
             }
         }
@@ -473,18 +514,19 @@ namespace NoLandholdingApp
 
                     // Format the date and time before passing to the report
                     string formattedDate = certificationDate.ToString("MM-dd-yyyy"); // Formatting Date
-                    string formattedTime = certificationTime.ToString("hh:mm tt"); // Formatting Time to 12-hour format
+                    string formattedTime = certificationTime.ToString("hh:mm:ss tt"); // Formatting Time to 12-hour format
+                    string typeset = selectedRow.Cells["Type"].Value.ToString();
 
                     // Pass the selected data to the report form and show it
-                    DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued);
-                    SearchResultReportForm reportForm = new SearchResultReportForm(selectedData);
+                    DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued, typeset);
+                    SearchResultReportForm reportForm = new SearchResultReportForm(selectedData, typeset);
                     reportForm.ShowDialog();
                 }
             }
         }
 
         // Method to get selected data (same logic as in SearchResultsForm)
-        private DataTable GetSelectedData(string maritalstatus, string parentguardian, string patient, string hospital, string hospitaladdress, string barangay, string certificationDate, string certificationTime, string amountPaid, string receiptNo, string receiptDateIssued, string placeIssued)
+        private DataTable GetSelectedData(string maritalstatus, string parentguardian, string patient, string hospital, string hospitaladdress, string barangay, string certificationDate, string certificationTime, string amountPaid, string receiptNo, string receiptDateIssued, string placeIssued, string typeset)
         {
             DataTable selectedData = new DataTable();
             selectedData.Columns.Add("MaritalStatus");
@@ -499,9 +541,10 @@ namespace NoLandholdingApp
             selectedData.Columns.Add("ReceiptNo");
             selectedData.Columns.Add("ReceiptDateIssued");
             selectedData.Columns.Add("PlaceIssued");
+            selectedData.Columns.Add("Type");
 
             // Add the selected row data into the DataTable
-            selectedData.Rows.Add(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, certificationDate, certificationTime, amountPaid, receiptNo, receiptDateIssued, placeIssued);
+            selectedData.Rows.Add(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, certificationDate, certificationTime, amountPaid, receiptNo, receiptDateIssued, placeIssued, typeset);
 
             return selectedData;
         }
@@ -564,11 +607,12 @@ namespace NoLandholdingApp
             string hospital = txtHospital.Text;
             string hospitalAddress = txtHospitalAddress.Text;
             string certificationDate = DateTime.Now.ToString("MM-dd-yyyy");  // "2025-02-11"
-            string certificationTime = DateTime.Now.ToString("hh:mm tt", CultureInfo.InvariantCulture);
+            string certificationTime = DateTime.Now.ToString("hh:mm:ss tt", CultureInfo.InvariantCulture);
             string amountpaid = txtAmountPaid.Text;
             string receiptno = txtReceiptNo.Text;
             string receiptdateissued = dateTimePickerDateIssued.Value.ToString("MM-dd-yyyy");
             string placeissued = txtPlaceIssued.Text;
+            string typeset = comboBoxTypeList.Text;
 
 
             // Combine parent guardians with "AND" if both are filled, otherwise use the non-empty one
@@ -596,8 +640,8 @@ namespace NoLandholdingApp
             }
 
             // Insert query
-            string query = "INSERT INTO certificationrecords_nolandholding (MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued) " +
-                           "VALUES (@MaritalStatus, @ParentGuardian, @ParentGuardian2, @Barangay, @Patient, @Hospital, @HospitalAddress, @CertificationDate, @CertificationTime, @AmountPaid, @ReceiptNo, @ReceiptDateIssued, @PlaceIssued)";
+            string query = "INSERT INTO certificationrecords_nolandholding (MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type) " +
+                           "VALUES (@MaritalStatus, @ParentGuardian, @ParentGuardian2, @Barangay, @Patient, @Hospital, @HospitalAddress, @CertificationDate, @CertificationTime, @AmountPaid, @ReceiptNo, @ReceiptDateIssued, @PlaceIssued, @Type)";
 
             try
             {
@@ -631,13 +675,14 @@ namespace NoLandholdingApp
                             cmd.Parameters.AddWithValue("@ReceiptDateIssued", DBNull.Value);
                             cmd.Parameters.AddWithValue("@PlaceIssued", DBNull.Value);
                         }
+                        cmd.Parameters.AddWithValue("@Type", typeset);
 
                         cmd.ExecuteNonQuery();
                     }
                 }
 
                 // Show success message
-                MessageBox.Show("Data Saved Successfully");
+                //MessageBox.Show("Data Saved Successfully");
                 LoadDatabase();
 
                 // Fetch only the latest saved record for printing
@@ -650,19 +695,17 @@ namespace NoLandholdingApp
                 }
 
                 // Open the Report Form with the latest record
-                bool isSchoolRequirements = radioSchoolRequirements.Checked;
-                ReportForm reportForm = new ReportForm(isSchoolRequirements, reportData);
-                reportForm.ShowDialog();
+                if (comboBoxTypeList.SelectedItem != null)
+                {
+                    string selectedType = comboBoxTypeList.SelectedItem.ToString(); // Get selected type
+                    ReportForm reportForm = new ReportForm(reportData, selectedType); // Pass only reportData and selectedType
+                    reportForm.ShowDialog();
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
-        }
-
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void radioOthers_CheckedChanged(object sender, EventArgs e)
@@ -953,7 +996,7 @@ namespace NoLandholdingApp
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private TextBox txtSearch;
@@ -974,7 +1017,7 @@ namespace NoLandholdingApp
             // Create the TextBox (Search Box)
             txtSearch = new TextBox();
             txtSearch.Size = new Size(200, 17);
-            txtSearch.Location = new Point(40, 285);
+            txtSearch.Location = new Point(60, 279);
             txtSearch.BorderStyle = BorderStyle.FixedSingle;
 
             // Set placeholder initially
@@ -1023,7 +1066,7 @@ namespace NoLandholdingApp
             // Create the PictureBox (Magnifying Glass)
             picSearch = new PictureBox();
             picSearch.Size = new Size(17, 17);
-            picSearch.Location = new Point(txtSearch.Width - 20, txtSearch.Top - 283); // Position inside TextBox
+            picSearch.Location = new Point(txtSearch.Width - 20, txtSearch.Top - 277); // Position inside TextBox
             picSearch.SizeMode = PictureBoxSizeMode.StretchImage;
             picSearch.BackColor = Color.Transparent; // Ensure no background
 
@@ -1121,11 +1164,12 @@ namespace NoLandholdingApp
 
             // Add columns to the DataTable
             dt.Columns.Add("Patient");
+            dt.Columns.Add("Barangay");
             dt.Columns.Add("MaritalStatus");
+            dt.Columns.Add("Type");
             dt.Columns.Add("ParentGuardian");
             dt.Columns.Add("Hospital");
             dt.Columns.Add("HospitalAddress");
-            dt.Columns.Add("Barangay");
             dt.Columns.Add("CertificationDate");
             dt.Columns.Add("CertificationTime");
             dt.Columns.Add("AmountPaid");
@@ -1144,10 +1188,10 @@ namespace NoLandholdingApp
 
 
             // SQL query to fetch data based on the search term
-            string query = "SELECT MaritalStatus, ParentGuardian, Patient, Hospital, HospitalAddress, Barangay, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued " +
+            string query = "SELECT MaritalStatus, ParentGuardian, Patient, Hospital, HospitalAddress, Barangay, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type " +
                            "FROM certificationrecords_nolandholding " +
                            "WHERE Patient LIKE @SearchTerm " +
-                           "ORDER BY CertificationDate DESC, STR_TO_DATE(CertificationTime, '%h:%i %p') DESC";  // Use DESC for descending order
+                           "ORDER BY CertificationDate DESC, STR_TO_DATE(CertificationTime, '%h:%i:%s %p') DESC";  // Use DESC for descending order
 
             try
             {
@@ -1270,6 +1314,58 @@ namespace NoLandholdingApp
         private void shutdownToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void radioHospital_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LoadComboBoxItemsFromMySQL()
+        {
+            // MySQL connection string
+            // Load database configuration
+            var config = ConfigHelper.LoadConfig();
+            string connectionString = ""; // Declare outside
+
+            if (config.Count > 0)
+            {
+                connectionString = $"Server={config["Server"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+            }
+
+            string query = "SELECT typesets FROM sys_nolandholding_internaltypesets ";
+
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (var command = new MySqlCommand(query, connection))
+                    using (var reader = command.ExecuteReader())
+                    {
+                        comboBoxTypeList.Items.Clear();
+
+                        while (reader.Read())
+                        {
+                            if (!reader.IsDBNull(0))
+                            {
+                                comboBoxTypeList.Items.Add(reader.GetString(0));
+                            }
+                        }
+                    }
+                }
+
+                if (comboBoxTypeList.Items.Count > 0)
+                {
+                    comboBoxTypeList.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading data from MySQL: " + ex.Message);
+                Console.WriteLine($"Exception: {ex}");
+            }
         }
     }
 }

@@ -39,9 +39,6 @@
             this.labelHospital = new System.Windows.Forms.Label();
             this.txtHospitalAddress = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.radioHospital = new System.Windows.Forms.RadioButton();
-            this.radioSchoolRequirements = new System.Windows.Forms.RadioButton();
-            this.radioOthers = new System.Windows.Forms.RadioButton();
             this.txtPatientStudent = new System.Windows.Forms.TextBox();
             this.labelPatientStudent = new System.Windows.Forms.Label();
             this.checkBoxMarried = new System.Windows.Forms.CheckBox();
@@ -63,25 +60,29 @@
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.comboBoxTypeList = new System.Windows.Forms.ComboBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolStrip.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // labelParentGuardian
             // 
             this.labelParentGuardian.AutoSize = true;
             this.labelParentGuardian.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelParentGuardian.Location = new System.Drawing.Point(37, 90);
+            this.labelParentGuardian.Location = new System.Drawing.Point(57, 101);
             this.labelParentGuardian.Name = "labelParentGuardian";
             this.labelParentGuardian.Size = new System.Drawing.Size(94, 13);
             this.labelParentGuardian.TabIndex = 1;
             this.labelParentGuardian.Text = "Parents/ Guardian";
-            this.labelParentGuardian.Click += new System.EventHandler(this.labelParentGuardian_Click);
             // 
             // txtParentGuardian
             // 
             this.txtParentGuardian.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtParentGuardian.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtParentGuardian.Location = new System.Drawing.Point(137, 83);
+            this.txtParentGuardian.Location = new System.Drawing.Point(157, 94);
             this.txtParentGuardian.Name = "txtParentGuardian";
             this.txtParentGuardian.Size = new System.Drawing.Size(352, 20);
             this.txtParentGuardian.TabIndex = 2;
@@ -90,7 +91,7 @@
             // 
             this.txtParentGuardian2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtParentGuardian2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtParentGuardian2.Location = new System.Drawing.Point(137, 109);
+            this.txtParentGuardian2.Location = new System.Drawing.Point(157, 120);
             this.txtParentGuardian2.Name = "txtParentGuardian2";
             this.txtParentGuardian2.Size = new System.Drawing.Size(352, 20);
             this.txtParentGuardian2.TabIndex = 4;
@@ -99,18 +100,17 @@
             // 
             this.labelParentGuardian2.AutoSize = true;
             this.labelParentGuardian2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelParentGuardian2.Location = new System.Drawing.Point(37, 116);
+            this.labelParentGuardian2.Location = new System.Drawing.Point(57, 127);
             this.labelParentGuardian2.Name = "labelParentGuardian2";
             this.labelParentGuardian2.Size = new System.Drawing.Size(94, 13);
             this.labelParentGuardian2.TabIndex = 3;
             this.labelParentGuardian2.Text = "Parents/ Guardian";
-            this.labelParentGuardian2.Click += new System.EventHandler(this.labelParentGuardian2_Click);
             // 
             // txtAddress
             // 
             this.txtAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAddress.Location = new System.Drawing.Point(137, 184);
+            this.txtAddress.Location = new System.Drawing.Point(157, 195);
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.Size = new System.Drawing.Size(352, 20);
             this.txtAddress.TabIndex = 10;
@@ -119,7 +119,7 @@
             // 
             this.labelAddress.AutoSize = true;
             this.labelAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelAddress.Location = new System.Drawing.Point(37, 191);
+            this.labelAddress.Location = new System.Drawing.Point(57, 202);
             this.labelAddress.Name = "labelAddress";
             this.labelAddress.Size = new System.Drawing.Size(45, 13);
             this.labelAddress.TabIndex = 9;
@@ -129,7 +129,7 @@
             // 
             this.txtHospital.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtHospital.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtHospital.Location = new System.Drawing.Point(137, 210);
+            this.txtHospital.Location = new System.Drawing.Point(157, 221);
             this.txtHospital.Name = "txtHospital";
             this.txtHospital.Size = new System.Drawing.Size(352, 20);
             this.txtHospital.TabIndex = 12;
@@ -138,7 +138,7 @@
             // 
             this.labelHospital.AutoSize = true;
             this.labelHospital.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelHospital.Location = new System.Drawing.Point(37, 217);
+            this.labelHospital.Location = new System.Drawing.Point(57, 228);
             this.labelHospital.Name = "labelHospital";
             this.labelHospital.Size = new System.Drawing.Size(45, 13);
             this.labelHospital.TabIndex = 11;
@@ -148,7 +148,7 @@
             // 
             this.txtHospitalAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtHospitalAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.txtHospitalAddress.Location = new System.Drawing.Point(137, 236);
+            this.txtHospitalAddress.Location = new System.Drawing.Point(157, 247);
             this.txtHospitalAddress.Name = "txtHospitalAddress";
             this.txtHospitalAddress.Size = new System.Drawing.Size(352, 20);
             this.txtHospitalAddress.TabIndex = 14;
@@ -157,55 +157,17 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(37, 243);
+            this.label1.Location = new System.Drawing.Point(57, 254);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(86, 13);
             this.label1.TabIndex = 13;
             this.label1.Text = "Hospital Address";
             // 
-            // radioHospital
-            // 
-            this.radioHospital.AutoSize = true;
-            this.radioHospital.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioHospital.Location = new System.Drawing.Point(139, 28);
-            this.radioHospital.Name = "radioHospital";
-            this.radioHospital.Size = new System.Drawing.Size(63, 17);
-            this.radioHospital.TabIndex = 15;
-            this.radioHospital.TabStop = true;
-            this.radioHospital.Text = "Hospital";
-            this.radioHospital.UseVisualStyleBackColor = true;
-            this.radioHospital.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
-            // radioSchoolRequirements
-            // 
-            this.radioSchoolRequirements.AutoSize = true;
-            this.radioSchoolRequirements.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioSchoolRequirements.Location = new System.Drawing.Point(230, 28);
-            this.radioSchoolRequirements.Name = "radioSchoolRequirements";
-            this.radioSchoolRequirements.Size = new System.Drawing.Size(126, 17);
-            this.radioSchoolRequirements.TabIndex = 16;
-            this.radioSchoolRequirements.TabStop = true;
-            this.radioSchoolRequirements.Text = "School Requirements";
-            this.radioSchoolRequirements.UseVisualStyleBackColor = true;
-            // 
-            // radioOthers
-            // 
-            this.radioOthers.AutoSize = true;
-            this.radioOthers.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioOthers.Location = new System.Drawing.Point(416, 28);
-            this.radioOthers.Name = "radioOthers";
-            this.radioOthers.Size = new System.Drawing.Size(56, 17);
-            this.radioOthers.TabIndex = 17;
-            this.radioOthers.TabStop = true;
-            this.radioOthers.Text = "Others";
-            this.radioOthers.UseVisualStyleBackColor = true;
-            this.radioOthers.CheckedChanged += new System.EventHandler(this.radioOthers_CheckedChanged);
-            // 
             // txtPatientStudent
             // 
             this.txtPatientStudent.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPatientStudent.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPatientStudent.Location = new System.Drawing.Point(137, 158);
+            this.txtPatientStudent.Location = new System.Drawing.Point(157, 169);
             this.txtPatientStudent.Name = "txtPatientStudent";
             this.txtPatientStudent.Size = new System.Drawing.Size(352, 20);
             this.txtPatientStudent.TabIndex = 8;
@@ -214,7 +176,7 @@
             // 
             this.labelPatientStudent.AutoSize = true;
             this.labelPatientStudent.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPatientStudent.Location = new System.Drawing.Point(37, 165);
+            this.labelPatientStudent.Location = new System.Drawing.Point(57, 176);
             this.labelPatientStudent.Name = "labelPatientStudent";
             this.labelPatientStudent.Size = new System.Drawing.Size(85, 13);
             this.labelPatientStudent.TabIndex = 7;
@@ -224,7 +186,7 @@
             // 
             this.checkBoxMarried.AutoSize = true;
             this.checkBoxMarried.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxMarried.Location = new System.Drawing.Point(317, 135);
+            this.checkBoxMarried.Location = new System.Drawing.Point(337, 146);
             this.checkBoxMarried.Name = "checkBoxMarried";
             this.checkBoxMarried.Size = new System.Drawing.Size(61, 17);
             this.checkBoxMarried.TabIndex = 6;
@@ -238,7 +200,7 @@
             this.checkBoxSingle.Checked = true;
             this.checkBoxSingle.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxSingle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxSingle.Location = new System.Drawing.Point(230, 135);
+            this.checkBoxSingle.Location = new System.Drawing.Point(250, 146);
             this.checkBoxSingle.Name = "checkBoxSingle";
             this.checkBoxSingle.Size = new System.Drawing.Size(55, 17);
             this.checkBoxSingle.TabIndex = 5;
@@ -249,9 +211,9 @@
             // btnPrintSave
             // 
             this.btnPrintSave.BackColor = System.Drawing.Color.Transparent;
-            this.btnPrintSave.Location = new System.Drawing.Point(495, 90);
+            this.btnPrintSave.Location = new System.Drawing.Point(379, 275);
             this.btnPrintSave.Name = "btnPrintSave";
-            this.btnPrintSave.Size = new System.Drawing.Size(68, 34);
+            this.btnPrintSave.Size = new System.Drawing.Size(68, 26);
             this.btnPrintSave.TabIndex = 21;
             this.btnPrintSave.Text = "Print/Save";
             this.btnPrintSave.UseVisualStyleBackColor = false;
@@ -261,77 +223,77 @@
             // 
             this.txtAmountPaid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtAmountPaid.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.txtAmountPaid.Location = new System.Drawing.Point(672, 104);
+            this.txtAmountPaid.Location = new System.Drawing.Point(692, 94);
             this.txtAmountPaid.Name = "txtAmountPaid";
             this.txtAmountPaid.Size = new System.Drawing.Size(95, 20);
-            this.txtAmountPaid.TabIndex = 22;
+            this.txtAmountPaid.TabIndex = 16;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(580, 111);
+            this.label2.Location = new System.Drawing.Point(600, 101);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(67, 13);
-            this.label2.TabIndex = 23;
+            this.label2.TabIndex = 15;
             this.label2.Text = "Amount Paid";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(580, 137);
+            this.label3.Location = new System.Drawing.Point(600, 127);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(64, 13);
-            this.label3.TabIndex = 25;
+            this.label3.TabIndex = 17;
             this.label3.Text = "Receipt No.";
             // 
             // txtReceiptNo
             // 
             this.txtReceiptNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtReceiptNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.txtReceiptNo.Location = new System.Drawing.Point(672, 130);
+            this.txtReceiptNo.Location = new System.Drawing.Point(692, 120);
             this.txtReceiptNo.Name = "txtReceiptNo";
             this.txtReceiptNo.Size = new System.Drawing.Size(95, 20);
-            this.txtReceiptNo.TabIndex = 24;
+            this.txtReceiptNo.TabIndex = 18;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(580, 163);
+            this.label4.Location = new System.Drawing.Point(600, 153);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(64, 13);
-            this.label4.TabIndex = 27;
+            this.label4.TabIndex = 19;
             this.label4.Text = "Date Issued";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(580, 189);
+            this.label5.Location = new System.Drawing.Point(600, 179);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(68, 13);
-            this.label5.TabIndex = 29;
+            this.label5.TabIndex = 21;
             this.label5.Text = "Place Issued";
             // 
             // txtPlaceIssued
             // 
             this.txtPlaceIssued.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPlaceIssued.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.txtPlaceIssued.Location = new System.Drawing.Point(672, 182);
+            this.txtPlaceIssued.Location = new System.Drawing.Point(692, 172);
             this.txtPlaceIssued.Name = "txtPlaceIssued";
             this.txtPlaceIssued.Size = new System.Drawing.Size(95, 20);
-            this.txtPlaceIssued.TabIndex = 28;
+            this.txtPlaceIssued.TabIndex = 22;
             // 
             // dateTimePickerDateIssued
             // 
             this.dateTimePickerDateIssued.CustomFormat = "MM-dd-yyyy";
             this.dateTimePickerDateIssued.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerDateIssued.Location = new System.Drawing.Point(672, 156);
+            this.dateTimePickerDateIssued.Location = new System.Drawing.Point(692, 146);
             this.dateTimePickerDateIssued.Name = "dateTimePickerDateIssued";
             this.dateTimePickerDateIssued.Size = new System.Drawing.Size(95, 20);
-            this.dateTimePickerDateIssued.TabIndex = 26;
+            this.dateTimePickerDateIssued.TabIndex = 20;
             // 
             // toolStrip
             // 
@@ -365,24 +327,22 @@
             // 
             this.changePasswordToolStripMenuItem.Image = global::NoLandholdingApp.Properties.Resources.change_password;
             this.changePasswordToolStripMenuItem.Name = "changePasswordToolStripMenuItem";
-            this.changePasswordToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.changePasswordToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.changePasswordToolStripMenuItem.Text = "ChangePassword";
             // 
             // preferenceToolStripMenuItem
             // 
             this.preferenceToolStripMenuItem.Image = global::NoLandholdingApp.Properties.Resources.preference;
             this.preferenceToolStripMenuItem.Name = "preferenceToolStripMenuItem";
-            this.preferenceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.preferenceToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.preferenceToolStripMenuItem.Text = "Preference";
-            this.preferenceToolStripMenuItem.Click += new System.EventHandler(this.preferenceToolStripMenuItem_Click);
             // 
             // shutdownToolStripMenuItem
             // 
             this.shutdownToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("shutdownToolStripMenuItem.Image")));
             this.shutdownToolStripMenuItem.Name = "shutdownToolStripMenuItem";
-            this.shutdownToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.shutdownToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.shutdownToolStripMenuItem.Text = "Shutdown";
-            this.shutdownToolStripMenuItem.Click += new System.EventHandler(this.shutdownToolStripMenuItem_Click);
             // 
             // toolStripButton1
             // 
@@ -395,13 +355,12 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(661, 238);
+            this.btnRefresh.Location = new System.Drawing.Point(453, 275);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.Size = new System.Drawing.Size(56, 26);
             this.btnRefresh.TabIndex = 31;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // label6
             // 
@@ -409,20 +368,49 @@
             this.label6.BackColor = System.Drawing.Color.Black;
             this.label6.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(163, 51);
+            this.label6.Location = new System.Drawing.Point(269, 16);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(292, 29);
             this.label6.TabIndex = 32;
             this.label6.Text = "CLIENT INFORMATION";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.comboBoxTypeList);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.pictureBox1);
+            this.groupBox1.Location = new System.Drawing.Point(40, 28);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(768, 280);
+            this.groupBox1.TabIndex = 99;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Information";
+            // 
+            // comboBoxTypeList
+            // 
+            this.comboBoxTypeList.Cursor = System.Windows.Forms.Cursors.Default;
+            this.comboBoxTypeList.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.comboBoxTypeList.FormattingEnabled = true;
+            this.comboBoxTypeList.Location = new System.Drawing.Point(561, 174);
+            this.comboBoxTypeList.Name = "comboBoxTypeList";
+            this.comboBoxTypeList.Size = new System.Drawing.Size(186, 21);
+            this.comboBoxTypeList.TabIndex = 23;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Black;
+            this.pictureBox1.Location = new System.Drawing.Point(6, 16);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(756, 29);
+            this.pictureBox1.TabIndex = 33;
+            this.pictureBox1.TabStop = false;
             // 
             // formInput
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1784, 961);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.btnRefresh);
-            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.dateTimePickerDateIssued);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtPlaceIssued);
@@ -436,9 +424,6 @@
             this.Controls.Add(this.checkBoxMarried);
             this.Controls.Add(this.txtPatientStudent);
             this.Controls.Add(this.labelPatientStudent);
-            this.Controls.Add(this.radioOthers);
-            this.Controls.Add(this.radioSchoolRequirements);
-            this.Controls.Add(this.radioHospital);
             this.Controls.Add(this.txtHospitalAddress);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtHospital);
@@ -449,13 +434,18 @@
             this.Controls.Add(this.labelParentGuardian2);
             this.Controls.Add(this.txtParentGuardian);
             this.Controls.Add(this.labelParentGuardian);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.toolStrip);
+            this.DoubleBuffered = true;
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Name = "formInput";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Municipal Assessor\'s Office: Certification";
-            this.Load += new System.EventHandler(this.formInput_Load);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -472,9 +462,6 @@
         private System.Windows.Forms.Label labelHospital;
         private System.Windows.Forms.TextBox txtHospitalAddress;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.RadioButton radioHospital;
-        private System.Windows.Forms.RadioButton radioSchoolRequirements;
-        private System.Windows.Forms.RadioButton radioOthers;
         private System.Windows.Forms.TextBox txtPatientStudent;
         private System.Windows.Forms.Label labelPatientStudent;
         private System.Windows.Forms.CheckBox checkBoxMarried;
@@ -496,6 +483,9 @@
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ComboBox comboBoxTypeList;
     }
 }
 

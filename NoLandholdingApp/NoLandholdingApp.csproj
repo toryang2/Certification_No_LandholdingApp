@@ -201,7 +201,7 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
-    <EmbeddedResource Include="CertificationReport-SchoolRequirements.rdlc" />
+    <EmbeddedResource Include="CertificationReport-Scholarship.rdlc" />
     <EmbeddedResource Include="DatabaseSetup.resx">
       <DependentUpon>DatabaseSetup.cs</DependentUpon>
     </EmbeddedResource>

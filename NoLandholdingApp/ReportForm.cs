@@ -13,24 +13,24 @@ namespace NoLandholdingApp
 {
     public partial class ReportForm : Form
     {
-        private bool isSchoolRequirements;
         private DataTable reportData;
+        private string selectedType; // Store selected type
 
-        public ReportForm(bool isSchoolRequirements, DataTable data)
+        public ReportForm(DataTable data, string selectedType)
         {
             InitializeComponent();
             this.reportData = data;
-            this.isSchoolRequirements = isSchoolRequirements;
+            this.selectedType = selectedType.Trim().ToLower(); // Store and normalize it
             this.Icon = Properties.Resources.logo;
         }
 
         private void ReportForm_Load(object sender, EventArgs e)
         {
-            reportViewer1.ProcessingMode = Microsoft.Reporting.WinForms.ProcessingMode.Local;
+            reportViewer1.ProcessingMode = ProcessingMode.Local;
 
             // Set the ReportViewer to PrintLayout view
-            reportViewer1.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.Percent;
-            reportViewer1.ZoomPercent = 100;  // Optional: Set the initial zoom level
+            reportViewer1.ZoomMode = ZoomMode.Percent;
+            reportViewer1.ZoomPercent = 100;
             reportViewer1.SetDisplayMode(DisplayMode.PrintLayout);
 
             if (reportData == null || reportData.Rows.Count == 0)
@@ -39,11 +39,22 @@ namespace NoLandholdingApp
                 return;
             }
 
-            // Choose the correct RDLC file
-            string reportPath = isSchoolRequirements
-                ? "NoLandholdingApp.CertificationReport-SchoolRequirements.rdlc"
-                : "NoLandholdingApp.CertificationReport.rdlc";
+            // Determine the RDLC file based on the selectedType from comboBoxTypeList
+            string reportPath;
+            if (selectedType == "hospitalization")
+            {
+                reportPath = "NoLandholdingApp.CertificationReport.rdlc";
+            }
+            else if (selectedType == "scholarship")
+            {
+                reportPath = "NoLandholdingApp.CertificationReport-Scholarship.rdlc";
+            }
+            else
+            {
+                reportPath = "NoLandholdingApp.CertificationReport.rdlc"; // Default fallback
+            }
 
+            // Set the selected RDLC file
             reportViewer1.LocalReport.ReportEmbeddedResource = reportPath;
 
             // Clear previous data sources
@@ -53,14 +64,14 @@ namespace NoLandholdingApp
             ReportDataSource rds = new ReportDataSource("nolandholding_dataset", reportData);
             reportViewer1.LocalReport.DataSources.Add(rds);
 
-            // Check if the report is being rendered correctly
-            reportViewer1.LocalReport.Refresh();
-
             // Refresh the report
+            reportViewer1.LocalReport.Refresh();
             reportViewer1.RefreshReport();
 
-            // Debugging: Log the number of records
+            // Debugging: Log the selected report and number of records
+            Console.WriteLine($"Selected Report: {reportPath}");
             Console.WriteLine($"Records in report: {reportData.Rows.Count}");
         }
+
     }
 }

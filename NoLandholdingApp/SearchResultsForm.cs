@@ -54,11 +54,12 @@ namespace NoLandholdingApp
 
                 // Format the date and time before passing to the report
                 string formattedDate = certificationDate.ToString("yyyy-MM-dd"); // Formatting Date
-                string formattedTime = certificationTime.ToString("hh:mm tt"); // Formatting Time to 12-hour format
+                string formattedTime = certificationTime.ToString("hh:mm:ss tt"); // Formatting Time to 12-hour format
+                string typeset = selectedRow.Cells["Type"].Value.ToString();
 
                 // Pass the selected data to the report form and show it
-                DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued);
-                SearchResultReportForm reportForm = new SearchResultReportForm(selectedData);
+                DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued, typeset);
+                SearchResultReportForm reportForm = new SearchResultReportForm(selectedData, typeset);
                 reportForm.ShowDialog();
             }
         }
@@ -99,18 +100,19 @@ namespace NoLandholdingApp
 
                     // Format the date and time before passing to the report
                     string formattedDate = certificationDate.ToString("yyyy-MM-dd"); // Formatting Date
-                    string formattedTime = certificationTime.ToString("hh:mm tt"); // Formatting Time to 12-hour format
+                    string formattedTime = certificationTime.ToString("hh:mm:ss tt"); // Formatting Time to 12-hour format
+                    string typeset = selectedRow.Cells["Type"].Value.ToString();
 
                     // Pass the selected data to the report form and show it
-                    DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued);
-                    SearchResultReportForm reportForm = new SearchResultReportForm(selectedData);
+                    DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued, typeset);
+                    SearchResultReportForm reportForm = new SearchResultReportForm(selectedData, typeset);
                     reportForm.ShowDialog();
                 }
             }
         }
 
         // Method to get selected data (already explained earlier)
-        private DataTable GetSelectedData(string maritalstatus, string parentguardian, string patient, string hospital, string hospitaladdress, string barangay, string certificationDate, string certificationTime, string amountPaid, string receiptNo, string receiptDateIssued, string placeIssued)
+        private DataTable GetSelectedData(string maritalstatus, string parentguardian, string patient, string hospital, string hospitaladdress, string barangay, string certificationDate, string certificationTime, string amountPaid, string receiptNo, string receiptDateIssued, string placeIssued, string typeset)
         {
             DataTable selectedData = new DataTable();
             selectedData.Columns.Add("MaritalStatus");
@@ -125,9 +127,10 @@ namespace NoLandholdingApp
             selectedData.Columns.Add("ReceiptNo");
             selectedData.Columns.Add("ReceiptDateIssued");
             selectedData.Columns.Add("PlaceIssued");
+            selectedData.Columns.Add("Type");
 
             // Add the selected row data into the DataTable
-            selectedData.Rows.Add(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, certificationDate, certificationTime, amountPaid, receiptNo, receiptDateIssued, placeIssued);
+            selectedData.Rows.Add(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, certificationDate, certificationTime, amountPaid, receiptNo, receiptDateIssued, placeIssued, typeset);
 
             return selectedData;
         }

@@ -1,12 +1,6 @@
 ﻿using Microsoft.Reporting.WinForms;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NoLandholdingApp
@@ -14,11 +8,13 @@ namespace NoLandholdingApp
     public partial class SearchResultReportForm : Form
     {
         private DataTable reportData;
+        private string reportType;
 
-        public SearchResultReportForm(DataTable data)
+        public SearchResultReportForm(DataTable data, string type)
         {
             InitializeComponent();
             this.reportData = data;
+            this.reportType = type;
             this.Icon = Properties.Resources.logo;
         }
 
@@ -37,8 +33,21 @@ namespace NoLandholdingApp
                 return;
             }
 
-            // Set RDLC Report Path (ensure it's set as "Embedded Resource" in Properties)
-            reportViewer1.LocalReport.ReportEmbeddedResource = "NoLandholdingApp.CertificationReport.rdlc";
+            // Conditionally set the RDLC report path based on reportType (typeset)
+            string reportPath = "NoLandholdingApp.CertificationReport.rdlc";  // Default report
+
+            if (reportType == "Scholarship") // Example: If type is "School", change report
+            {
+                reportPath = "NoLandholdingApp.CertificationReport-Scholarship.rdlc"; // Update to your school report
+            }
+            else if (reportType == "Hospitalization") // Example: If type is "Hospital", change report
+            {
+                reportPath = "NoLandholdingApp.CertificationReport.rdlc"; // Update to your hospital report
+            }
+            // Add more conditions for other report types if needed
+
+            // Set the appropriate RDLC report path
+            reportViewer1.LocalReport.ReportEmbeddedResource = reportPath;
 
             // Clear previous data sources
             reportViewer1.LocalReport.DataSources.Clear();
@@ -57,5 +66,4 @@ namespace NoLandholdingApp
             Console.WriteLine($"Records in report: {reportData.Rows.Count}");
         }
     }
-
 }
