@@ -283,8 +283,6 @@ namespace NoLandholdingApp {
             
             private global::System.Data.DataColumn columnParentGuardian;
             
-            private global::System.Data.DataColumn columnParentGuardian2;
-            
             private global::System.Data.DataColumn columnBarangay;
             
             private global::System.Data.DataColumn columnPatient;
@@ -351,14 +349,6 @@ namespace NoLandholdingApp {
             public global::System.Data.DataColumn ParentGuardianColumn {
                 get {
                     return this.columnParentGuardian;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn ParentGuardian2Column {
-                get {
-                    return this.columnParentGuardian2;
                 }
             }
             
@@ -479,12 +469,11 @@ namespace NoLandholdingApp {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public noLandholding_DataSourceRow AddnoLandholding_DataSourceRow(string MaritalStatus, string ParentGuardian, string ParentGuardian2, string Barangay, string Patient, string Hospital, string HospitalAddress, string CertificationDate, string CertificationTime, string AmountPaid, string ReceiptNo, string ReceiptDateIssued, string PlaceIssued) {
+            public noLandholding_DataSourceRow AddnoLandholding_DataSourceRow(string MaritalStatus, string ParentGuardian, string Barangay, string Patient, string Hospital, string HospitalAddress, string CertificationDate, string CertificationTime, string AmountPaid, string ReceiptNo, string ReceiptDateIssued, string PlaceIssued) {
                 noLandholding_DataSourceRow rownoLandholding_DataSourceRow = ((noLandholding_DataSourceRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         MaritalStatus,
                         ParentGuardian,
-                        ParentGuardian2,
                         Barangay,
                         Patient,
                         Hospital,
@@ -526,7 +515,6 @@ namespace NoLandholdingApp {
             internal void InitVars() {
                 this.columnMaritalStatus = base.Columns["MaritalStatus"];
                 this.columnParentGuardian = base.Columns["ParentGuardian"];
-                this.columnParentGuardian2 = base.Columns["ParentGuardian2"];
                 this.columnBarangay = base.Columns["Barangay"];
                 this.columnPatient = base.Columns["Patient"];
                 this.columnHospital = base.Columns["Hospital"];
@@ -546,8 +534,6 @@ namespace NoLandholdingApp {
                 base.Columns.Add(this.columnMaritalStatus);
                 this.columnParentGuardian = new global::System.Data.DataColumn("ParentGuardian", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnParentGuardian);
-                this.columnParentGuardian2 = new global::System.Data.DataColumn("ParentGuardian2", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnParentGuardian2);
                 this.columnBarangay = new global::System.Data.DataColumn("Barangay", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBarangay);
                 this.columnPatient = new global::System.Data.DataColumn("Patient", typeof(string), null, global::System.Data.MappingType.Element);
@@ -749,23 +735,6 @@ namespace NoLandholdingApp {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string ParentGuardian2 {
-                get {
-                    try {
-                        return ((string)(this[this.tablenoLandholding_DataSource.ParentGuardian2Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ParentGuardian2\' in table \'noLandholding_DataSource\' is DBN" +
-                                "ull.", e);
-                    }
-                }
-                set {
-                    this[this.tablenoLandholding_DataSource.ParentGuardian2Column] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public string Barangay {
                 get {
                     try {
@@ -940,18 +909,6 @@ namespace NoLandholdingApp {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetParentGuardianNull() {
                 this[this.tablenoLandholding_DataSource.ParentGuardianColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsParentGuardian2Null() {
-                return this.IsNull(this.tablenoLandholding_DataSource.ParentGuardian2Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetParentGuardian2Null() {
-                this[this.tablenoLandholding_DataSource.ParentGuardian2Column] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

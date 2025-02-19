@@ -22,6 +22,11 @@ namespace NoLandholdingApp
             this.reportData = data;
             this.selectedType = selectedType.Trim().ToLower(); // Store and normalize it
             this.Icon = Properties.Resources.logo;
+
+
+            this.KeyPreview = true;
+            // Subscribe to KeyDown event
+            this.KeyDown += new KeyEventHandler(reportViewer1_KeyDown);
         }
 
         private void ReportForm_Load(object sender, EventArgs e)
@@ -68,10 +73,45 @@ namespace NoLandholdingApp
             reportViewer1.LocalReport.Refresh();
             reportViewer1.RefreshReport();
 
+            reportViewer1.Focus();
+
             // Debugging: Log the selected report and number of records
             Console.WriteLine($"Selected Report: {reportPath}");
             Console.WriteLine($"Records in report: {reportData.Rows.Count}");
+
         }
 
+        private void reportViewer1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.P)
+            {
+                e.Handled = true;
+                PrintReport();
+            }
+        }
+
+        private void PrintReport()
+        {
+            try
+            {
+                if (reportViewer1.LocalReport.GetParameters().Count > 0)
+                {
+                    reportViewer1.PrintDialog();
+                }
+                else
+                {
+                    MessageBox.Show("No preview available. Please ensure the report is loaded correctly.", "Print Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while printing: {ex.Message}", "Print Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void reportViewer1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

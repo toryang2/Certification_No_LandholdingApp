@@ -63,9 +63,17 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.comboBoxTypeList = new System.Windows.Forms.ComboBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.linkScholarship = new System.Windows.Forms.LinkLabel();
+            this.linkPhilHealth = new System.Windows.Forms.LinkLabel();
+            this.linkNoLandHolding = new System.Windows.Forms.LinkLabel();
+            this.linkBailBond = new System.Windows.Forms.LinkLabel();
+            this.linkHospitalization = new System.Windows.Forms.LinkLabel();
+            this.label7 = new System.Windows.Forms.Label();
             this.toolStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelParentGuardian
@@ -405,11 +413,116 @@
             this.pictureBox1.TabIndex = 33;
             this.pictureBox1.TabStop = false;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.linkScholarship);
+            this.groupBox2.Controls.Add(this.linkPhilHealth);
+            this.groupBox2.Controls.Add(this.linkNoLandHolding);
+            this.groupBox2.Controls.Add(this.linkBailBond);
+            this.groupBox2.Controls.Add(this.linkHospitalization);
+            this.groupBox2.Controls.Add(this.label7);
+            this.groupBox2.Location = new System.Drawing.Point(814, 28);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(768, 280);
+            this.groupBox2.TabIndex = 100;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Information";
+            // 
+            // linkScholarship
+            // 
+            this.linkScholarship.AutoSize = true;
+            this.linkScholarship.Cursor = System.Windows.Forms.Cursors.Default;
+            this.linkScholarship.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.linkScholarship.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.linkScholarship.LinkColor = System.Drawing.Color.RoyalBlue;
+            this.linkScholarship.Location = new System.Drawing.Point(11, 132);
+            this.linkScholarship.Name = "linkScholarship";
+            this.linkScholarship.Size = new System.Drawing.Size(90, 19);
+            this.linkScholarship.TabIndex = 5;
+            this.linkScholarship.TabStop = true;
+            this.linkScholarship.Text = "Scholarship";
+            this.linkScholarship.VisitedLinkColor = System.Drawing.Color.RoyalBlue;
+            this.linkScholarship.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkScholarship_LinkClicked);
+            // 
+            // linkPhilHealth
+            // 
+            this.linkPhilHealth.AutoSize = true;
+            this.linkPhilHealth.Cursor = System.Windows.Forms.Cursors.Default;
+            this.linkPhilHealth.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.linkPhilHealth.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.linkPhilHealth.LinkColor = System.Drawing.Color.RoyalBlue;
+            this.linkPhilHealth.Location = new System.Drawing.Point(11, 113);
+            this.linkPhilHealth.Name = "linkPhilHealth";
+            this.linkPhilHealth.Size = new System.Drawing.Size(80, 19);
+            this.linkPhilHealth.TabIndex = 4;
+            this.linkPhilHealth.TabStop = true;
+            this.linkPhilHealth.Text = "PhilHealth";
+            this.linkPhilHealth.VisitedLinkColor = System.Drawing.Color.RoyalBlue;
+            this.linkPhilHealth.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkPhilHealth_LinkClicked);
+            // 
+            // linkNoLandHolding
+            // 
+            this.linkNoLandHolding.AutoSize = true;
+            this.linkNoLandHolding.Cursor = System.Windows.Forms.Cursors.Default;
+            this.linkNoLandHolding.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.linkNoLandHolding.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.linkNoLandHolding.LinkColor = System.Drawing.Color.RoyalBlue;
+            this.linkNoLandHolding.Location = new System.Drawing.Point(11, 94);
+            this.linkNoLandHolding.Name = "linkNoLandHolding";
+            this.linkNoLandHolding.Size = new System.Drawing.Size(128, 19);
+            this.linkNoLandHolding.TabIndex = 3;
+            this.linkNoLandHolding.TabStop = true;
+            this.linkNoLandHolding.Text = "No Land Holding";
+            this.linkNoLandHolding.VisitedLinkColor = System.Drawing.Color.RoyalBlue;
+            // 
+            // linkBailBond
+            // 
+            this.linkBailBond.AutoSize = true;
+            this.linkBailBond.Cursor = System.Windows.Forms.Cursors.Default;
+            this.linkBailBond.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.linkBailBond.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.linkBailBond.LinkColor = System.Drawing.Color.RoyalBlue;
+            this.linkBailBond.Location = new System.Drawing.Point(11, 73);
+            this.linkBailBond.Name = "linkBailBond";
+            this.linkBailBond.Size = new System.Drawing.Size(75, 19);
+            this.linkBailBond.TabIndex = 2;
+            this.linkBailBond.TabStop = true;
+            this.linkBailBond.Text = "Bail Bond";
+            this.linkBailBond.VisitedLinkColor = System.Drawing.Color.RoyalBlue;
+            this.linkBailBond.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkBailBond_LinkClicked);
+            // 
+            // linkHospitalization
+            // 
+            this.linkHospitalization.AutoSize = true;
+            this.linkHospitalization.Cursor = System.Windows.Forms.Cursors.Default;
+            this.linkHospitalization.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.linkHospitalization.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.linkHospitalization.LinkColor = System.Drawing.Color.RoyalBlue;
+            this.linkHospitalization.Location = new System.Drawing.Point(11, 49);
+            this.linkHospitalization.Name = "linkHospitalization";
+            this.linkHospitalization.Size = new System.Drawing.Size(112, 19);
+            this.linkHospitalization.TabIndex = 1;
+            this.linkHospitalization.TabStop = true;
+            this.linkHospitalization.Text = "Hospitalization";
+            this.linkHospitalization.VisitedLinkColor = System.Drawing.Color.RoyalBlue;
+            this.linkHospitalization.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkHospitalization_LinkClicked);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold);
+            this.label7.Location = new System.Drawing.Point(6, 16);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(248, 29);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "NO LAND HOLDING";
+            // 
             // formInput
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1784, 961);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.dateTimePickerDateIssued);
             this.Controls.Add(this.label5);
@@ -446,6 +559,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -486,6 +601,13 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ComboBox comboBoxTypeList;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.LinkLabel linkHospitalization;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.LinkLabel linkScholarship;
+        private System.Windows.Forms.LinkLabel linkPhilHealth;
+        private System.Windows.Forms.LinkLabel linkNoLandHolding;
+        private System.Windows.Forms.LinkLabel linkBailBond;
     }
 }
 

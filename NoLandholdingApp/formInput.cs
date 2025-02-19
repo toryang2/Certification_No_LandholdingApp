@@ -18,6 +18,7 @@ using Button = System.Windows.Forms.Button;
 using System.Globalization;
 using System.Windows.Forms.VisualStyles;
 using System.Security.Cryptography;
+using NoLandholdingApp.noLandHolding;
 
 namespace NoLandholdingApp
 {
@@ -85,7 +86,7 @@ namespace NoLandholdingApp
             }
         }
 
-        private DataTable GetCertificationData()
+        public DataTable GetCertificationData()
         {
             DataTable dt = new DataTable();
             // Load database configuration
@@ -1364,6 +1365,48 @@ namespace NoLandholdingApp
                 MessageBox.Show("Error loading data from MySQL: " + ex.Message);
                 Console.WriteLine($"Exception: {ex}");
             }
+        }
+
+        private void linkHospitalization_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // Create an instance of the hospitalization form
+            hospitalization hospitalizationForm = new hospitalization();
+
+            // Subscribe to the OnPrintSave event
+            hospitalizationForm.OnPrintSave += LoadDatabase;
+
+            // Show the hospitalization form as a modal dialog
+            hospitalizationForm.ShowDialog();
+        }
+
+        private void linkScholarship_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // Create an instance of the hospitalization form
+            scholarship scholarshipForm = new scholarship();
+
+            // Subscribe to the OnPrintSave event
+            //scholarshipForm.OnPrintSave += LoadDatabase;
+
+            // Show the hospitalization form as a modal dialog
+            scholarshipForm.ShowDialog();
+        }
+
+        private void linkBailBond_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // Create an instance of the hospitalization form
+            bailbond bailbondForm = new bailbond();
+
+            // Subscribe to the OnPrintSave event
+            //scholarshipForm.OnPrintSave += LoadDatabase;
+
+            // Show the hospitalization form as a modal dialog
+            bailbondForm.ShowDialog();
+        }
+
+        private void linkPhilHealth_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            philhealth philhealthForm = new philhealth();
+            philhealthForm.ShowDialog();
         }
     }
 }

@@ -1,6 +1,9 @@
 ﻿using Microsoft.Reporting.WinForms;
 using System;
 using System.Data;
+using System.Drawing.Printing;
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace NoLandholdingApp
@@ -16,15 +19,16 @@ namespace NoLandholdingApp
             this.reportData = data;
             this.reportType = type;
             this.Icon = Properties.Resources.logo;
+
+            this.KeyPreview = true;
+            this.KeyDown += new KeyEventHandler(reportViewer1_KeyDown);
         }
 
         private void SearchResultReportForm_Load(object sender, EventArgs e)
         {
-            reportViewer1.ProcessingMode = Microsoft.Reporting.WinForms.ProcessingMode.Local;
-
-            // Set the ReportViewer to PrintLayout view
-            reportViewer1.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.Percent;
-            reportViewer1.ZoomPercent = 100;  // Optional: Set the initial zoom level
+            reportViewer1.ProcessingMode = ProcessingMode.Local;
+            reportViewer1.ZoomMode = ZoomMode.Percent;
+            reportViewer1.ZoomPercent = 100;
             reportViewer1.SetDisplayMode(DisplayMode.PrintLayout);
 
             if (reportData == null || reportData.Rows.Count == 0)
@@ -33,37 +37,38 @@ namespace NoLandholdingApp
                 return;
             }
 
-            // Conditionally set the RDLC report path based on reportType (typeset)
             string reportPath = "NoLandholdingApp.CertificationReport.rdlc";  // Default report
 
-            if (reportType == "Scholarship") // Example: If type is "School", change report
+            if (reportType == "Scholarship")
             {
-                reportPath = "NoLandholdingApp.CertificationReport-Scholarship.rdlc"; // Update to your school report
+                reportPath = "NoLandholdingApp.CertificationReport-Scholarship.rdlc";
             }
-            else if (reportType == "Hospitalization") // Example: If type is "Hospital", change report
+            else if (reportType == "Hospitalization")
             {
-                reportPath = "NoLandholdingApp.CertificationReport.rdlc"; // Update to your hospital report
+                reportPath = "NoLandholdingApp.CertificationReport.rdlc";
             }
-            // Add more conditions for other report types if needed
 
-            // Set the appropriate RDLC report path
             reportViewer1.LocalReport.ReportEmbeddedResource = reportPath;
-
-            // Clear previous data sources
             reportViewer1.LocalReport.DataSources.Clear();
-
-            // Ensure dataset name matches RDLC
-            ReportDataSource rds = new ReportDataSource("nolandholding_dataset", reportData);
-            reportViewer1.LocalReport.DataSources.Add(rds);
-
-            // Check if the report is being rendered correctly
+            reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("nolandholding_dataset", reportData));
             reportViewer1.LocalReport.Refresh();
-
-            // Refresh the report
             reportViewer1.RefreshReport();
+        }
 
-            // Debugging: Log the number of records
-            Console.WriteLine($"Records in report: {reportData.Rows.Count}");
+        private void reportViewer1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.P)
+            {
+                e.Handled = true;
+                PrintReport();
+            }
+        }
+
+        private void PrintReport()
+        {
+
+            reportViewer1.PrintDialog();
+
         }
     }
 }
