@@ -8,7 +8,7 @@
     <ProjectGuid>{0E400420-98E1-4676-B5CD-EF0763B5E4B8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>NoLandholdingApp</RootNamespace>
-    <AssemblyName>NoLandholdingApp</AssemblyName>
+    <AssemblyName>assessorcertification</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -62,6 +62,26 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>logo.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AspNetCore.Reporting, Version=2.1.0.0, Culture=neutral, PublicKeyToken=2bae00f048aee5c9, processorArchitecture=MSIL">
@@ -137,8 +157,8 @@
       <HintPath>..\packages\System.Configuration.ConfigurationManager.9.0.2\lib\net462\System.Configuration.ConfigurationManager.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SqlClient, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SqlClient.4.5.1\lib\net461\System.Data.SqlClient.dll</HintPath>
+    <Reference Include="System.Data.SqlClient, Version=4.6.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SqlClient.4.9.0\lib\net462\System.Data.SqlClient.dll</HintPath>
     </Reference>
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=9.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.9.0.2\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
@@ -190,20 +210,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CertificationDataSet.cs">
+    <Compile Include="dataset\CertificationDataSet.cs">
       <DependentUpon>CertificationDataSet.xsd</DependentUpon>
     </Compile>
-    <Compile Include="CertificationDataSet.Designer.cs">
+    <Compile Include="dataset\CertificationDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CertificationDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="classes\printDialog.cs" />
     <Compile Include="ConfigHelper.cs" />
-    <Compile Include="DatabaseSetup.cs">
+    <Compile Include="ui\DatabaseSetup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DatabaseSetup.Designer.cs">
+    <Compile Include="ui\DatabaseSetup.Designer.cs">
       <DependentUpon>DatabaseSetup.cs</DependentUpon>
     </Compile>
     <Compile Include="noLandHolding\bailbond.cs">
@@ -230,22 +250,22 @@
     <Compile Include="noLandHolding\scholarship.Designer.cs">
       <DependentUpon>scholarship.cs</DependentUpon>
     </Compile>
-    <Compile Include="SearchResultsForm.cs">
+    <Compile Include="ui\SearchResultsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SearchResultsForm.Designer.cs">
+    <Compile Include="ui\SearchResultsForm.Designer.cs">
       <DependentUpon>SearchResultsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SearchResultReportForm.cs">
+    <Compile Include="ui\report\SearchResultReportForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SearchResultReportForm.Designer.cs">
+    <Compile Include="ui\report\SearchResultReportForm.Designer.cs">
       <DependentUpon>SearchResultReportForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ReportForm.cs">
+    <Compile Include="ui\report\ReportForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ReportForm.Designer.cs">
+    <Compile Include="ui\report\ReportForm.Designer.cs">
       <DependentUpon>ReportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="formInput.cs">
@@ -258,14 +278,14 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\DataSources\CertificationData.cs" />
-    <Compile Include="SettingsForm.cs">
+    <Compile Include="ui\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
+    <Compile Include="ui\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="CertificationReport-Scholarship.rdlc" />
-    <EmbeddedResource Include="DatabaseSetup.resx">
+    <EmbeddedResource Include="rdlc\CertificationReport-Scholarship.rdlc" />
+    <EmbeddedResource Include="ui\DatabaseSetup.resx">
       <DependentUpon>DatabaseSetup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="noLandHolding\bailbond.resx">
@@ -277,7 +297,7 @@
     <EmbeddedResource Include="noLandHolding\scholarship.resx">
       <DependentUpon>scholarship.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SearchResultsForm.resx">
+    <EmbeddedResource Include="ui\SearchResultsForm.resx">
       <DependentUpon>SearchResultsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="formInput.resx">
@@ -293,25 +313,25 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="CertificationReport.rdlc" />
-    <EmbeddedResource Include="ReportForm.resx">
+    <EmbeddedResource Include="rdlc\CertificationReport.rdlc" />
+    <EmbeddedResource Include="ui\report\ReportForm.resx">
       <DependentUpon>ReportForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SearchResultReportForm.resx">
+    <EmbeddedResource Include="ui\report\SearchResultReportForm.resx">
       <DependentUpon>SearchResultReportForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingsForm.resx">
+    <EmbeddedResource Include="ui\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="CertificationDataSet.xsc">
+    <None Include="dataset\CertificationDataSet.xsc">
       <DependentUpon>CertificationDataSet.xsd</DependentUpon>
     </None>
-    <None Include="CertificationDataSet.xsd">
+    <None Include="dataset\CertificationDataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>CertificationDataSet.Designer.cs</LastGenOutput>
     </None>
-    <None Include="CertificationDataSet.xss">
+    <None Include="dataset\CertificationDataSet.xss">
       <DependentUpon>CertificationDataSet.xsd</DependentUpon>
     </None>
     <None Include="packages.config" />
@@ -334,6 +354,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\dataserver.ico" />
     <None Include="assets\magnifier.png" />
     <None Include="assets\magnifier_hover.png" />
     <None Include="Resources\logo.ico" />
@@ -362,6 +383,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -389,11 +389,12 @@
             this.Controls.Add(this.labelParentGuardian2);
             this.Controls.Add(this.txtParentGuardian);
             this.Controls.Add(this.labelParentGuardian);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "bailbond";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "bailbond";
+            this.Text = "Municipal Assessor\'s Office: Certification - Bailbond";
             this.ResumeLayout(false);
             this.PerformLayout();
 

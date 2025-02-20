@@ -248,7 +248,7 @@ namespace NoLandholdingApp.noLandHolding
 
             if (config.Count > 0)
             {
-                connectionString = $"Server={config["Server"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+                connectionString = $"Server={config["Server"]};Port={config["Port"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
             }
 
             // Insert query

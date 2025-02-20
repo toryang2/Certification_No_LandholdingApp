@@ -24,7 +24,7 @@ namespace NoLandholdingApp
 {
     public partial class formInput : Form
     {
-        private PrintDocument printDocument; private int currentPage; private float scaleFactor;
+        //private PrintDocument printDocument; private int currentPage; private float scaleFactor;
 
         // Set default value on form load
         private void Form_Load(object sender, EventArgs e)
@@ -95,7 +95,7 @@ namespace NoLandholdingApp
 
             if (config.Count > 0)
             {
-                connectionString = $"Server={config["Server"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+                connectionString = $"Server={config["Server"]};Port={config["Port"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
             }
 
             // Fetch only the latest record based on the highest ID (newest entry)
@@ -134,7 +134,7 @@ namespace NoLandholdingApp
             SetFormProperties();
             SetUpPanel();
             SetTextBoxCharacterCasing();
-            InitializePrintDocument();
+            //InitializePrintDocument();
             AttachEventHandlers();
 
 
@@ -335,13 +335,13 @@ namespace NoLandholdingApp
             txtAmountPaid.Text = "₱0.00";
         }
 
-        private void InitializePrintDocument()
-        {
-            printDocument = new PrintDocument();
-            printDocument.PrintPage += PrintDocument_PrintPage;
-            currentPage = 1;
-            scaleFactor = 1.0f; // Default scale factor
-        }
+        //private void InitializePrintDocument()
+        //{
+        //    printDocument = new PrintDocument();
+        //    printDocument.PrintPage += PrintDocument_PrintPage;
+        //    currentPage = 1;
+        //    scaleFactor = 1.0f; // Default scale factor
+        //}
 
         private void AttachEventHandlers()
         {
@@ -635,7 +635,7 @@ namespace NoLandholdingApp
 
             if (config.Count > 0)
             {
-                connectionString = $"Server={config["Server"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+                connectionString = $"Server={config["Server"]};Port={config["Port"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
             }
 
             // Insert query
@@ -712,17 +712,17 @@ namespace NoLandholdingApp
 
         }
 
-        private void btnPrint_Click(object sender, EventArgs e)
-        {
+        //private void btnPrint_Click(object sender, EventArgs e)
+        //{
 
-            PrintDialog printDialog = new PrintDialog();
-            printDialog.Document = printDocument;
+        //    PrintDialog printDialog = new PrintDialog();
+        //    printDialog.Document = printDocument;
 
-            if (printDialog.ShowDialog() == DialogResult.OK)
-            {
-                printDocument.Print();
-            }
-        }
+        //    if (printDialog.ShowDialog() == DialogResult.OK)
+        //    {
+        //        printDocument.Print();
+        //    }
+        //}
 
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
@@ -960,33 +960,33 @@ namespace NoLandholdingApp
             //}
         }
 
-        private void btnPrintPreview_Click(object sender, EventArgs e)
-        {
-            PrintPreviewDialog previewDialog = new PrintPreviewDialog
-            {
-                Document = printDocument,
-                Width = 800,   // Set preview window width
-                Height = 600   // Set preview window height
-            };
+        //private void btnPrintPreview_Click(object sender, EventArgs e)
+        //{
+        //    PrintPreviewDialog previewDialog = new PrintPreviewDialog
+        //    {
+        //        Document = printDocument,
+        //        Width = 800,   // Set preview window width
+        //        Height = 600   // Set preview window height
+        //    };
 
-            previewDialog.ShowDialog(); // Show the print preview window
-        }
+        //    previewDialog.ShowDialog(); // Show the print preview window
+        //}
 
-        private void btnZoomIn_Click(object sender, EventArgs e)
-        {
-            // Increase the scaling factor for zooming in
-            scaleFactor += 0.1f;
-            printDocument.DefaultPageSettings.Landscape = true;
-            printDocument.Print(); // Re-render the document with the new scale
-        }
+        //private void btnZoomIn_Click(object sender, EventArgs e)
+        //{
+        //    // Increase the scaling factor for zooming in
+        //    scaleFactor += 0.1f;
+        //    printDocument.DefaultPageSettings.Landscape = true;
+        //    printDocument.Print(); // Re-render the document with the new scale
+        //}
 
-        private void btnZoomOut_CLick(object sender, EventArgs e)
-        {
-            // Decrease the scaling factor for zooming out
-            scaleFactor -= 0.1f;
-            printDocument.DefaultPageSettings.Landscape = false;
-            printDocument.Print(); // Re-render the document with the new scale
-        }
+        //private void btnZoomOut_CLick(object sender, EventArgs e)
+        //{
+        //    // Decrease the scaling factor for zooming out
+        //    scaleFactor -= 0.1f;
+        //    printDocument.DefaultPageSettings.Landscape = false;
+        //    printDocument.Print(); // Re-render the document with the new scale
+        //}
 
         private void searchBox_TextChanged(object sender, EventArgs e)
         {
@@ -1182,7 +1182,7 @@ namespace NoLandholdingApp
 
             if (config.Count > 0)
             {
-                connectionString = $"Server={config["Server"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+                connectionString = $"Server={config["Server"]};Port={config["Port"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
             }
 
 
@@ -1298,13 +1298,6 @@ namespace NoLandholdingApp
 
         }
 
-        private void preferenceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Pass the reference of formInput if opened from preferences, else null
-            SettingsForm settingsForm = new SettingsForm(); // Pass 'this' (formInput) reference
-            settingsForm.ShowDialog();
-        }
-
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             LoadDatabase();
@@ -1329,7 +1322,7 @@ namespace NoLandholdingApp
 
             if (config.Count > 0)
             {
-                connectionString = $"Server={config["Server"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+                connectionString = $"Server={config["Server"]};Port={config["Port"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
             }
 
             string query = "SELECT typesets FROM sys_nolandholding_internaltypesets ";
@@ -1407,6 +1400,13 @@ namespace NoLandholdingApp
         {
             philhealth philhealthForm = new philhealth();
             philhealthForm.ShowDialog();
+        }
+
+        private void preferenceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Pass the reference of formInput if opened from preferences, else null
+            SettingsForm settingsForm = new SettingsForm(); // Pass 'this' (formInput) reference
+            settingsForm.ShowDialog();
         }
     }
 }

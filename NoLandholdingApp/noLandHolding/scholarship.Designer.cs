@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.lblAddress = new System.Windows.Forms.Label();
-            this.lblPatientStudent = new System.Windows.Forms.Label();
+            this.lblStudent = new System.Windows.Forms.Label();
             this.lblParentGuardian = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.dateTimePickerDateIssued = new System.Windows.Forms.DateTimePicker();
@@ -65,17 +65,17 @@
             this.lblAddress.Text = "*";
             this.lblAddress.Visible = false;
             // 
-            // lblPatientStudent
+            // lblStudent
             // 
-            this.lblPatientStudent.AutoSize = true;
-            this.lblPatientStudent.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPatientStudent.ForeColor = System.Drawing.Color.Red;
-            this.lblPatientStudent.Location = new System.Drawing.Point(461, 128);
-            this.lblPatientStudent.Name = "lblPatientStudent";
-            this.lblPatientStudent.Size = new System.Drawing.Size(15, 20);
-            this.lblPatientStudent.TabIndex = 153;
-            this.lblPatientStudent.Text = "*";
-            this.lblPatientStudent.Visible = false;
+            this.lblStudent.AutoSize = true;
+            this.lblStudent.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStudent.ForeColor = System.Drawing.Color.Red;
+            this.lblStudent.Location = new System.Drawing.Point(461, 128);
+            this.lblStudent.Name = "lblStudent";
+            this.lblStudent.Size = new System.Drawing.Size(15, 20);
+            this.lblStudent.TabIndex = 153;
+            this.lblStudent.Text = "*";
+            this.lblStudent.Visible = false;
             // 
             // lblParentGuardian
             // 
@@ -294,7 +294,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(479, 341);
             this.Controls.Add(this.lblAddress);
-            this.Controls.Add(this.lblPatientStudent);
+            this.Controls.Add(this.lblStudent);
             this.Controls.Add(this.lblParentGuardian);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.dateTimePickerDateIssued);
@@ -316,9 +316,11 @@
             this.Controls.Add(this.labelParentGuardian2);
             this.Controls.Add(this.txtParentGuardian);
             this.Controls.Add(this.labelParentGuardian);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "scholarship";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Municipal Assessor\'s Office: Certification - Scholarship";
             this.ResumeLayout(false);
@@ -329,7 +331,7 @@
         #endregion
 
         private System.Windows.Forms.Label lblAddress;
-        private System.Windows.Forms.Label lblPatientStudent;
+        private System.Windows.Forms.Label lblStudent;
         private System.Windows.Forms.Label lblParentGuardian;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DateTimePicker dateTimePickerDateIssued;

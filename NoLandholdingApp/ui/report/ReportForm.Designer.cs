@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.reportViewer1 = new Microsoft.Reporting.WinForms.ReportViewer();
-            this.dataSet1 = new NoLandholdingApp.DataSet1();
+            this.dataSet1 = new NoLandholdingApp.dataset.DataSet1();
             this.noLandholdingDataSourceBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.noLandholding_DataSourceBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.noLandholdingDataSourceBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
@@ -90,7 +90,7 @@
 
         #endregion
         private System.Windows.Forms.BindingSource noLandholdingDataSourceBindingSource;
-        private DataSet1 dataSet1;
+        private dataset.DataSet1 dataSet1;
         private System.Windows.Forms.BindingSource noLandholding_DataSourceBindingSource;
         private System.Windows.Forms.BindingSource noLandholdingDataSourceBindingSource1;
         private Microsoft.Reporting.WinForms.ReportViewer reportViewer1;

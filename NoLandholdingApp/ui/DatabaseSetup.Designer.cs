@@ -39,6 +39,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnTestConnection = new System.Windows.Forms.Button();
+            this.labelPort = new System.Windows.Forms.Label();
+            this.txtPort = new System.Windows.Forms.TextBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.SuspendLayout();
             // 
             // txtServer
@@ -54,7 +57,7 @@
             this.txtDatabase.Location = new System.Drawing.Point(112, 48);
             this.txtDatabase.Name = "txtDatabase";
             this.txtDatabase.Size = new System.Drawing.Size(159, 20);
-            this.txtDatabase.TabIndex = 1;
+            this.txtDatabase.TabIndex = 2;
             this.txtDatabase.TextChanged += new System.EventHandler(this.txtDatabase_TextChanged);
             // 
             // txtUser
@@ -79,7 +82,7 @@
             this.checkBoxEnableDatabaseEdit.Location = new System.Drawing.Point(278, 50);
             this.checkBoxEnableDatabaseEdit.Name = "checkBoxEnableDatabaseEdit";
             this.checkBoxEnableDatabaseEdit.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxEnableDatabaseEdit.TabIndex = 2;
+            this.checkBoxEnableDatabaseEdit.TabIndex = 1;
             this.checkBoxEnableDatabaseEdit.UseVisualStyleBackColor = true;
             this.checkBoxEnableDatabaseEdit.CheckedChanged += new System.EventHandler(this.checkBoxEnableDatabaseEdit_CheckedChanged);
             // 
@@ -121,29 +124,56 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(212, 126);
+            this.btnSave.Location = new System.Drawing.Point(212, 173);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(59, 23);
-            this.btnSave.TabIndex = 6;
+            this.btnSave.TabIndex = 7;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnTestConnection
             // 
-            this.btnTestConnection.Location = new System.Drawing.Point(112, 126);
+            this.btnTestConnection.Location = new System.Drawing.Point(112, 173);
             this.btnTestConnection.Name = "btnTestConnection";
             this.btnTestConnection.Size = new System.Drawing.Size(94, 23);
-            this.btnTestConnection.TabIndex = 5;
+            this.btnTestConnection.TabIndex = 6;
             this.btnTestConnection.Text = "Test Connection";
             this.btnTestConnection.UseVisualStyleBackColor = true;
             this.btnTestConnection.Click += new System.EventHandler(this.btnTestConnection_Click);
+            // 
+            // labelPort
+            // 
+            this.labelPort.AutoSize = true;
+            this.labelPort.Location = new System.Drawing.Point(18, 134);
+            this.labelPort.Name = "labelPort";
+            this.labelPort.Size = new System.Drawing.Size(26, 13);
+            this.labelPort.TabIndex = 12;
+            this.labelPort.Text = "Port";
+            // 
+            // txtPort
+            // 
+            this.txtPort.Location = new System.Drawing.Point(112, 126);
+            this.txtPort.Name = "txtPort";
+            this.txtPort.Size = new System.Drawing.Size(159, 20);
+            this.txtPort.TabIndex = 5;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Location = new System.Drawing.Point(0, 186);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(306, 22);
+            this.statusStrip1.SizingGrip = false;
+            this.statusStrip1.TabIndex = 13;
+            this.statusStrip1.Text = "statusStrip1";
             // 
             // DatabaseSetup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(306, 167);
+            this.ClientSize = new System.Drawing.Size(306, 208);
+            this.Controls.Add(this.labelPort);
+            this.Controls.Add(this.txtPort);
             this.Controls.Add(this.btnTestConnection);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label4);
@@ -155,6 +185,8 @@
             this.Controls.Add(this.txtUser);
             this.Controls.Add(this.txtDatabase);
             this.Controls.Add(this.txtServer);
+            this.Controls.Add(this.statusStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DatabaseSetup";
@@ -179,5 +211,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnTestConnection;
+        private System.Windows.Forms.Label labelPort;
+        private System.Windows.Forms.TextBox txtPort;
+        private System.Windows.Forms.StatusStrip statusStrip1;
     }
 }

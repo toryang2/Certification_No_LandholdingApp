@@ -24,6 +24,7 @@ namespace NoLandholdingApp
 
             this.KeyPreview = true;
             this.KeyDown += DatabaseSetup_KeyDown;
+            this.Icon = Properties.Resources.dataserver;
         }
 
         private void checkBoxEnableDatabaseEdit_CheckedChanged(object sender, EventArgs e)
@@ -55,6 +56,7 @@ namespace NoLandholdingApp
                     txtDatabase.Text = config.ContainsKey("Database") ? config["Database"] : "";
                     txtUser.Text = config.ContainsKey("User") ? config["User"] : "";
                     txtPassword.Text = config.ContainsKey("Password") ? config["Password"] : "";
+                    txtPort.Text = config.ContainsKey("Port") ? config["Port"] : "";
 
                     btnSave.Enabled = false; // Keep save disabled until a successful test connection
                 }
@@ -68,7 +70,8 @@ namespace NoLandholdingApp
                 { "Server", txtServer.Text.Trim() },
                 { "Database", txtDatabase.Text.Trim() },
                 { "User", txtUser.Text.Trim() },
-                { "Password", txtPassword.Text.Trim() }
+                { "Password", txtPassword.Text.Trim() },
+                { "Port", txtPort.Text.Trim() }
             };
 
             ConfigHelper.SaveConfig(config);
@@ -93,7 +96,7 @@ namespace NoLandholdingApp
 
         private void btnTestConnection_Click(object sender, EventArgs e)
         {
-            string connectionString = $"Server={txtServer.Text.Trim()};Database={txtDatabase.Text.Trim()};Uid={txtUser.Text.Trim()};Pwd={txtPassword.Text.Trim()};";
+            string connectionString = $"Server={txtServer.Text.Trim()};Port={txtPort.Text.Trim()};Database={txtDatabase.Text.Trim()};Uid={txtUser.Text.Trim()};Pwd={txtPassword.Text.Trim()};";
 
             try
             {

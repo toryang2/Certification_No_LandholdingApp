@@ -37,15 +37,15 @@ namespace NoLandholdingApp
                 return;
             }
 
-            string reportPath = "NoLandholdingApp.CertificationReport.rdlc";  // Default report
+            string reportPath = "NoLandholdingApp.rdlc.CertificationReport.rdlc";  // Default report
 
             if (reportType == "Scholarship")
             {
-                reportPath = "NoLandholdingApp.CertificationReport-Scholarship.rdlc";
+                reportPath = "NoLandholdingApp.rdlc.CertificationReport-Scholarship.rdlc";
             }
             else if (reportType == "Hospitalization")
             {
-                reportPath = "NoLandholdingApp.CertificationReport.rdlc";
+                reportPath = "NoLandholdingApp.rdlc.CertificationReport.rdlc";
             }
 
             reportViewer1.LocalReport.ReportEmbeddedResource = reportPath;

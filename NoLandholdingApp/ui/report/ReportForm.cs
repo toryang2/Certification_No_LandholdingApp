@@ -48,15 +48,15 @@ namespace NoLandholdingApp
             string reportPath;
             if (selectedType == "hospitalization")
             {
-                reportPath = "NoLandholdingApp.CertificationReport.rdlc";
+                reportPath = "NoLandholdingApp.rdlc.CertificationReport.rdlc";
             }
             else if (selectedType == "scholarship")
             {
-                reportPath = "NoLandholdingApp.CertificationReport-Scholarship.rdlc";
+                reportPath = "NoLandholdingApp.rdlc.CertificationReport-Scholarship.rdlc";
             }
             else
             {
-                reportPath = "NoLandholdingApp.CertificationReport.rdlc"; // Default fallback
+                reportPath = "NoLandholdingApp.rdlc.CertificationReport.rdlc"; // Default fallback
             }
 
             // Set the selected RDLC file

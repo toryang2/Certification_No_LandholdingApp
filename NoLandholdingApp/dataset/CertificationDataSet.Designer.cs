@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace NoLandholdingApp {
+namespace NoLandholdingApp.dataset {
     
     
     /// <summary>

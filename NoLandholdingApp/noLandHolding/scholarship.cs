@@ -169,7 +169,7 @@ namespace NoLandholdingApp.noLandHolding
             // Array of text boxes and their corresponding labels
             (TextBox textBox, Label label)[] fields = {
         (txtParentGuardian, lblParentGuardian),
-        (txtStudent, lblPatientStudent),
+        (txtStudent, lblStudent),
         (txtAddress, lblAddress)
     };
 
@@ -209,6 +209,7 @@ namespace NoLandholdingApp.noLandHolding
             string maritalStatus = checkBoxSingle.Checked ? "SINGLE" : "MARRIED";
             string parentGuardian = txtParentGuardian.Text;
             string parentGuardian2 = txtParentGuardian2.Text;
+            string student = txtStudent.Text;
             string barangay = txtAddress.Text;
             string certificationDate = DateTime.Now.ToString("MM-dd-yyyy");  // "2025-02-11"
             string certificationTime = DateTime.Now.ToString("hh:mm:ss tt", CultureInfo.InvariantCulture);
@@ -216,7 +217,7 @@ namespace NoLandholdingApp.noLandHolding
             string receiptno = txtReceiptNo.Text;
             string receiptdateissued = dateTimePickerDateIssued.Value.ToString("MM-dd-yyyy");
             string placeissued = txtPlaceIssued.Text;
-            string typeset = "Hospitalization";
+            string typeset = "Scholarship";
 
 
             // Combine parent guardians with "AND" if both are filled, otherwise use the non-empty one
@@ -240,12 +241,12 @@ namespace NoLandholdingApp.noLandHolding
 
             if (config.Count > 0)
             {
-                connectionString = $"Server={config["Server"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+                connectionString = $"Server={config["Server"]};Port={config["Port"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
             }
 
             // Insert query
-            string query = "INSERT INTO certificationrecords_nolandholding (MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type) " +
-                            "VALUES (@MaritalStatus, @ParentGuardian, @ParentGuardian2, @Barangay, @Patient, @Hospital, @HospitalAddress, @CertificationDate, @CertificationTime, @AmountPaid, @ReceiptNo, @ReceiptDateIssued, @PlaceIssued, @Type)";
+            string query = "INSERT INTO certificationrecords_nolandholding (MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type) " +
+                            "VALUES (@MaritalStatus, @ParentGuardian, @ParentGuardian2, @Barangay, @Patient, @CertificationDate, @CertificationTime, @AmountPaid, @ReceiptNo, @ReceiptDateIssued, @PlaceIssued, @Type)";
 
             try
             {
@@ -258,6 +259,7 @@ namespace NoLandholdingApp.noLandHolding
                         cmd.Parameters.AddWithValue("@MaritalStatus", maritalStatus);
                         cmd.Parameters.AddWithValue("@ParentGuardian", combinedParentGuardian + " ");
                         cmd.Parameters.AddWithValue("@ParentGuardian2", string.Empty);  // We don't need this anymore
+                        cmd.Parameters.AddWithValue("@Patient", student);
                         cmd.Parameters.AddWithValue("@Barangay", barangay);
                         cmd.Parameters.AddWithValue("@CertificationDate", certificationDate);
                         cmd.Parameters.AddWithValue("@CertificationTime", certificationTime);  // Add the TimeSpan parameter directly

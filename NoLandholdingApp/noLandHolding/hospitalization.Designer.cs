@@ -390,6 +390,7 @@
             this.Controls.Add(this.labelParentGuardian2);
             this.Controls.Add(this.txtParentGuardian);
             this.Controls.Add(this.labelParentGuardian);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "hospitalization";
