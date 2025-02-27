@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
 
-public class ConfigHelper
+public class ConfigHelper2
 {
     private static string configPath = "config.ini";
     private static bool messageShown = false;  // Prevent multiple message boxes

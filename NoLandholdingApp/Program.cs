@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LoginScreen;
 
 namespace NoLandholdingApp
 {
@@ -16,7 +17,15 @@ namespace NoLandholdingApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new formInput());
+
+            var loginWindow = new LoginWindow();
+            loginWindow.ShowDialog();
+
+            if (loginWindow.IsAuthenticated)  // Check property directly
+            {
+                Application.Run(new formInput());
+            }
+            Console.WriteLine($"LoginWindow closed. IsAuthenticated = {loginWindow.IsAuthenticated}");
         }
     }
 }

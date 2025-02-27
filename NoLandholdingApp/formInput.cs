@@ -19,6 +19,7 @@ using System.Globalization;
 using System.Windows.Forms.VisualStyles;
 using System.Security.Cryptography;
 using NoLandholdingApp.noLandHolding;
+using CommonLibrary;
 
 namespace NoLandholdingApp
 {
@@ -26,65 +27,65 @@ namespace NoLandholdingApp
     {
         //private PrintDocument printDocument; private int currentPage; private float scaleFactor;
 
-        // Set default value on form load
-        private void Form_Load(object sender, EventArgs e)
-        {
-            // Set the "Single" checkbox as checked by default
-            checkBoxSingle.Checked = true;
+        //// Set default value on form load
+        //private void Form_Load(object sender, EventArgs e)
+        //{
+        //    // Set the "Single" checkbox as checked by default
+        //    checkBoxSingle.Checked = true;
 
-        }
+        //}
 
-        // KeyPress event to allow user to type a date
-        private void dateTimePickerDateIssued_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Allow digits, backspace, and slash
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != '/' && e.KeyChar != '\b')
-            {
-                e.Handled = true;  // Ignore the key press if it's not a valid character
-            }
-        }
+        //// KeyPress event to allow user to type a date
+        //private void dateTimePickerDateIssued_KeyPress(object sender, KeyPressEventArgs e)
+        //{
+        //    // Allow digits, backspace, and slash
+        //    if (!char.IsDigit(e.KeyChar) && e.KeyChar != '/' && e.KeyChar != '\b')
+        //    {
+        //        e.Handled = true;  // Ignore the key press if it's not a valid character
+        //    }
+        //}
 
-        // Optional: Validate the input date when text changes
-        private void DateTimePickerDateIssued_TextChanged(object sender, EventArgs e)
-        {
-            string input = dateTimePickerDateIssued.Text;
+        //// Optional: Validate the input date when text changes
+        //private void DateTimePickerDateIssued_TextChanged(object sender, EventArgs e)
+        //{
+        //    string input = dateTimePickerDateIssued.Text;
 
-            if (DateTime.TryParse(input, out DateTime validDate))
-            {
-                dateTimePickerDateIssued.Value = validDate;  // Update the DateTimePicker value
-            }
-            else
-            {
-                // Optional: Show a message if the input is invalid
-                // For example, display an error message or set the date back to default
-                dateTimePickerDateIssued.Value = DateTime.Now;  // Reset to current date or a default value
-            }
-        }
+        //    if (DateTime.TryParse(input, out DateTime validDate))
+        //    {
+        //        dateTimePickerDateIssued.Value = validDate;  // Update the DateTimePicker value
+        //    }
+        //    else
+        //    {
+        //        // Optional: Show a message if the input is invalid
+        //        // For example, display an error message or set the date back to default
+        //        dateTimePickerDateIssued.Value = DateTime.Now;  // Reset to current date or a default value
+        //    }
+        //}
 
-        // Handle the Married checkbox change
-        private void checkBoxMarried_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxMarried.Checked)
-            {
-                // Uncheck the "Single" checkbox if "Married" is checked
-                checkBoxSingle.Checked = false;
-            }
-            else
-            {
-                // Keep "Single" checked if "Married" is unchecked
-                checkBoxSingle.Checked = true;
-            }
-        }
+        //// Handle the Married checkbox change
+        //private void checkBoxMarried_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    if (checkBoxMarried.Checked)
+        //    {
+        //        // Uncheck the "Single" checkbox if "Married" is checked
+        //        checkBoxSingle.Checked = false;
+        //    }
+        //    else
+        //    {
+        //        // Keep "Single" checked if "Married" is unchecked
+        //        checkBoxSingle.Checked = true;
+        //    }
+        //}
 
-        // Handle the Single checkbox change
-        private void checkBoxSingle_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxSingle.Checked)
-            {
-                // Uncheck the "Married" checkbox if "Single" is checked
-                checkBoxMarried.Checked = false;
-            }
-        }
+        //// Handle the Single checkbox change
+        //private void checkBoxSingle_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    if (checkBoxSingle.Checked)
+        //    {
+        //        // Uncheck the "Married" checkbox if "Single" is checked
+        //        checkBoxMarried.Checked = false;
+        //    }
+        //}
 
         public DataTable GetCertificationData()
         {
@@ -133,7 +134,7 @@ namespace NoLandholdingApp
 
             SetFormProperties();
             SetUpPanel();
-            SetTextBoxCharacterCasing();
+            //SetTextBoxCharacterCasing();
             //InitializePrintDocument();
             AttachEventHandlers();
 
@@ -158,9 +159,9 @@ namespace NoLandholdingApp
             Panel panel = new Panel
             {
                 Dock = DockStyle.Bottom,
-                Height = 650,
+                Height = 620,
                 Margin = new Padding(20),
-                Padding = new Padding(40, 0, 40, 74)
+                Padding = new Padding(40, 0, 40, 27)
             };
 
             // Add the DataGridView to the Panel
@@ -168,6 +169,24 @@ namespace NoLandholdingApp
             panel.Controls.Add(dataGridViewResults);
             // Add the Panel to the form
             this.Controls.Add(panel);
+            InitializeStatusStrip();
+        }
+
+        private void InitializeStatusStrip()
+        {
+            // Create and configure the StatusStrip
+            StatusStrip statusStrip = new StatusStrip
+            {
+                Dock = DockStyle.Bottom // Dock it to the bottom of the form
+            };
+
+            ToolStripStatusLabel statusLabel = new ToolStripStatusLabel("Ready");
+            statusStrip.Items.Add(statusLabel);
+            statusStrip.SizingGrip = false;
+            statusStrip.BackColor = SystemColors.Control;
+
+            // Add the StatusStrip to the form
+            this.Controls.Add(statusStrip);
         }
 
         private void dataGridViewResults_DragOver(object sender, DragEventArgs e)
@@ -178,6 +197,61 @@ namespace NoLandholdingApp
         private void dataGridViewResults_MouseDown(object sender, MouseEventArgs e)
         {
             dataGridViewResults.ClearSelection();
+        }
+
+        private void dataGridViewResults_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dataGridViewResults.SelectedCells.Count > 1)
+            {
+                // Get the last selected cell
+                DataGridViewCell lastSelected = dataGridViewResults.SelectedCells[dataGridViewResults.SelectedCells.Count - 1];
+
+                // Temporarily remove the event handler to avoid recursion
+                dataGridViewResults.SelectionChanged -= dataGridViewResults_SelectionChanged;
+
+                // Clear previous selections
+                dataGridViewResults.ClearSelection();
+
+                // Select only the last selected cell
+                lastSelected.Selected = true;
+
+                // Reattach the event handler
+                dataGridViewResults.SelectionChanged += dataGridViewResults_SelectionChanged;
+            }
+        }
+
+        private void dataGridViewResults_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left) // Check if dragging with the left mouse button
+            {
+                DataGridView.HitTestInfo hitTest = dataGridViewResults.HitTest(e.X, e.Y);
+                if (hitTest.Type == DataGridViewHitTestType.Cell) // Ensure dragging over a cell
+                {
+                    if (dataGridViewResults.SelectedCells.Count != 1 ||
+                        dataGridViewResults.SelectedCells[0].RowIndex != hitTest.RowIndex ||
+                        dataGridViewResults.SelectedCells[0].ColumnIndex != hitTest.ColumnIndex)
+                    {
+                        // Temporarily remove the SelectionChanged event to prevent recursion
+                        dataGridViewResults.SelectionChanged -= dataGridViewResults_SelectionChanged;
+
+                        // Clear previous selections
+                        dataGridViewResults.ClearSelection();
+
+                        // Select the currently hovered cell
+                        dataGridViewResults[hitTest.ColumnIndex, hitTest.RowIndex].Selected = true;
+
+                        // Store the last selected cell for formatting
+                        _lastClickedRow = hitTest.RowIndex;
+                        _lastClickedCol = hitTest.ColumnIndex;
+
+                        // Refresh to apply the formatting changes
+                        dataGridViewResults.Invalidate();
+
+                        // Reattach the SelectionChanged event
+                        dataGridViewResults.SelectionChanged += dataGridViewResults_SelectionChanged;
+                    }
+                }
+            }
         }
 
         private void SetUpDataGridView()
@@ -198,6 +272,7 @@ namespace NoLandholdingApp
                 ContextMenuStrip = new ContextMenuStrip(),
                 GridColor = ColorTranslator.FromHtml("#CCCCCC"),
                 ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
+
                 ColumnHeadersDefaultCellStyle =
             {
                 SelectionBackColor = ColorTranslator.FromHtml("#F0F0F0"), // Prevent header highlight
@@ -229,7 +304,7 @@ namespace NoLandholdingApp
 
             // Set up appearance properties
             dataGridViewResults.CellBorderStyle = DataGridViewCellBorderStyle.None;
-            //dataGridViewResults.RowHeadersVisible = false;
+            dataGridViewResults.RowHeadersVisible = false;
             dataGridViewResults.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
 
             dataGridViewResults.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
@@ -308,6 +383,7 @@ namespace NoLandholdingApp
         {
             if (dataGridViewResults.Columns.Count == 0) return;
 
+            dataGridViewResults.Columns[" "].Width = 40;
             dataGridViewResults.Columns["Patient"].Width = 200;
             dataGridViewResults.Columns["Marital Status"].Width = 100;
             dataGridViewResults.Columns["Parent / Guardian"].Width = 250;
@@ -323,17 +399,17 @@ namespace NoLandholdingApp
             dataGridViewResults.Columns["Type"].Width = 150;
         }
 
-        private void SetTextBoxCharacterCasing()
-        {
-            // Set CharacterCasing for all TextBox controls
-            txtParentGuardian.CharacterCasing = CharacterCasing.Upper;
-            txtParentGuardian2.CharacterCasing = CharacterCasing.Upper;
-            txtAddress.CharacterCasing = CharacterCasing.Upper;
-            txtPatientStudent.CharacterCasing = CharacterCasing.Upper;
-            txtHospital.CharacterCasing = CharacterCasing.Upper;
-            txtHospitalAddress.CharacterCasing = CharacterCasing.Upper;
-            txtAmountPaid.Text = "₱0.00";
-        }
+        //private void SetTextBoxCharacterCasing()
+        //{
+        //    // Set CharacterCasing for all TextBox controls
+        //    txtParentGuardian.CharacterCasing = CharacterCasing.Upper;
+        //    txtParentGuardian2.CharacterCasing = CharacterCasing.Upper;
+        //    txtAddress.CharacterCasing = CharacterCasing.Upper;
+        //    txtPatientStudent.CharacterCasing = CharacterCasing.Upper;
+        //    txtHospital.CharacterCasing = CharacterCasing.Upper;
+        //    txtHospitalAddress.CharacterCasing = CharacterCasing.Upper;
+        //    txtAmountPaid.Text = "₱0.00";
+        //}
 
         //private void InitializePrintDocument()
         //{
@@ -346,19 +422,21 @@ namespace NoLandholdingApp
         private void AttachEventHandlers()
         {
             // Attach event handlers for form controls
-            checkBoxSingle.CheckedChanged += checkBoxSingle_CheckedChanged;
-            checkBoxMarried.CheckedChanged += checkBoxMarried_CheckedChanged;
+            //checkBoxSingle.CheckedChanged += checkBoxSingle_CheckedChanged;
+            //checkBoxMarried.CheckedChanged += checkBoxMarried_CheckedChanged;
             SearchBox();
             txtSearch.KeyDown += SearchBox_KeyDown;
-            txtAmountPaid.Enter += txtAmountPaid_Enter;
-            txtAmountPaid.KeyPress += txtAmountPaid_KeyPress;
-            txtAmountPaid.Leave += txtAmountPaid_Leave;
+            //txtAmountPaid.Enter += txtAmountPaid_Enter;
+            //txtAmountPaid.KeyPress += txtAmountPaid_KeyPress;
+            //txtAmountPaid.Leave += txtAmountPaid_Leave;
             dataGridViewResults.KeyDown += dataGridViewResults_KeyDown;
             dataGridViewResults.CellDoubleClick += dataGridViewResults_CellDoubleClick;
             dataGridViewResults.DragOver += dataGridViewResults_DragOver;
             dataGridViewResults.MouseDown += dataGridViewResults_MouseDown;
-            comboBoxTypeList.DropDownStyle = ComboBoxStyle.DropDownList;
-            LoadComboBoxItemsFromMySQL();
+            //comboBoxTypeList.DropDownStyle = ComboBoxStyle.DropDownList; 
+            dataGridViewResults.MouseMove += dataGridViewResults_MouseMove;
+
+            //LoadComboBoxItemsFromMySQL();
         }
 
         private int _lastClickedRow = -1;
@@ -548,164 +626,164 @@ namespace NoLandholdingApp
             return selectedData;
         }
 
-        private void txtAmountPaid_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Allow only numbers, backspace, and a single decimal point
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
-            {
-                e.Handled = true;
-            }
+        //private void txtAmountPaid_KeyPress(object sender, KeyPressEventArgs e)
+        //{
+        //    // Allow only numbers, backspace, and a single decimal point
+        //    if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+        //    {
+        //        e.Handled = true;
+        //    }
 
-            // Prevent multiple decimal points
-            if (e.KeyChar == '.' && txtAmountPaid.Text.Contains("."))
-            {
-                e.Handled = true;
-            }
+        //    // Prevent multiple decimal points
+        //    if (e.KeyChar == '.' && txtAmountPaid.Text.Contains("."))
+        //    {
+        //        e.Handled = true;
+        //    }
 
-            // Prevent the user from deleting the peso sign (₱) by backspace
-            if (txtAmountPaid.Text.Length == 1 && e.KeyChar == '\b') // Only allow backspace if length > 1
-            {
-                e.Handled = true; // Don't let the user backspace if the text is just "₱"
-            }
-        }
+        //    // Prevent the user from deleting the peso sign (₱) by backspace
+        //    if (txtAmountPaid.Text.Length == 1 && e.KeyChar == '\b') // Only allow backspace if length > 1
+        //    {
+        //        e.Handled = true; // Don't let the user backspace if the text is just "₱"
+        //    }
+        //}
 
-        private void txtAmountPaid_Enter(object sender, EventArgs e)
-        {
-            // Remove amount part only if it's the default value but keep the peso sign
-            if (txtAmountPaid.Text == "₱0.00")
-            {
-                txtAmountPaid.Text = "₱";  // Set to "₱" only, so user can start typing after it
-                txtAmountPaid.SelectionStart = txtAmountPaid.Text.Length;  // Place cursor at the end
-            }
-        }
+        //private void txtAmountPaid_Enter(object sender, EventArgs e)
+        //{
+        //    // Remove amount part only if it's the default value but keep the peso sign
+        //    if (txtAmountPaid.Text == "₱0.00")
+        //    {
+        //        txtAmountPaid.Text = "₱";  // Set to "₱" only, so user can start typing after it
+        //        txtAmountPaid.SelectionStart = txtAmountPaid.Text.Length;  // Place cursor at the end
+        //    }
+        //}
 
-        private void txtAmountPaid_Leave(object sender, EventArgs e)
-        {
-            string input = txtAmountPaid.Text.Replace("₱", "").Trim(); // Remove peso sign before parsing
+        //private void txtAmountPaid_Leave(object sender, EventArgs e)
+        //{
+        //    string input = txtAmountPaid.Text.Replace("₱", "").Trim(); // Remove peso sign before parsing
 
-            if (decimal.TryParse(input, out decimal parsedAmount))
-            {
-                // Re-add the peso sign and format with two decimal places
-                txtAmountPaid.Text = $"₱{parsedAmount:F2}";
-            }
-            else
-            {
-                // Default value if input is invalid, keeping the peso sign intact
-                txtAmountPaid.Text = "₱0.00";
-            }
-        }
+        //    if (decimal.TryParse(input, out decimal parsedAmount))
+        //    {
+        //        // Re-add the peso sign and format with two decimal places
+        //        txtAmountPaid.Text = $"₱{parsedAmount:F2}";
+        //    }
+        //    else
+        //    {
+        //        // Default value if input is invalid, keeping the peso sign intact
+        //        txtAmountPaid.Text = "₱0.00";
+        //    }
+        //}
 
-        private void btnPrintSave_Click(object sender, EventArgs e)
-        {
-            // Collect form data
-            string maritalStatus = checkBoxSingle.Checked ? "SINGLE" : "MARRIED";
-            string parentGuardian = txtParentGuardian.Text;
-            string parentGuardian2 = txtParentGuardian2.Text;
-            string barangay = txtAddress.Text;
-            string patient = txtPatientStudent.Text;
-            string hospital = txtHospital.Text;
-            string hospitalAddress = txtHospitalAddress.Text;
-            string certificationDate = DateTime.Now.ToString("MM-dd-yyyy");  // "2025-02-11"
-            string certificationTime = DateTime.Now.ToString("hh:mm:ss tt", CultureInfo.InvariantCulture);
-            string amountpaid = txtAmountPaid.Text;
-            string receiptno = txtReceiptNo.Text;
-            string receiptdateissued = dateTimePickerDateIssued.Value.ToString("MM-dd-yyyy");
-            string placeissued = txtPlaceIssued.Text;
-            string typeset = comboBoxTypeList.Text;
+        //private void btnPrintSave_Click(object sender, EventArgs e)
+        //{
+        //    // Collect form data
+        //    string maritalStatus = checkBoxSingle.Checked ? "SINGLE" : "MARRIED";
+        //    string parentGuardian = txtParentGuardian.Text;
+        //    string parentGuardian2 = txtParentGuardian2.Text;
+        //    string barangay = txtAddress.Text;
+        //    string patient = txtPatientStudent.Text;
+        //    string hospital = txtHospital.Text;
+        //    string hospitalAddress = txtHospitalAddress.Text;
+        //    string certificationDate = DateTime.Now.ToString("MM-dd-yyyy");  // "2025-02-11"
+        //    string certificationTime = DateTime.Now.ToString("hh:mm:ss tt", CultureInfo.InvariantCulture);
+        //    string amountpaid = txtAmountPaid.Text;
+        //    string receiptno = txtReceiptNo.Text;
+        //    string receiptdateissued = dateTimePickerDateIssued.Value.ToString("MM-dd-yyyy");
+        //    string placeissued = txtPlaceIssued.Text;
+        //    string typeset = comboBoxTypeList.Text;
 
 
-            // Combine parent guardians with "AND" if both are filled, otherwise use the non-empty one
-            string combinedParentGuardian = string.Empty;
+        //    // Combine parent guardians with "AND" if both are filled, otherwise use the non-empty one
+        //    string combinedParentGuardian = string.Empty;
 
-            if (!string.IsNullOrEmpty(parentGuardian) && !string.IsNullOrEmpty(parentGuardian2))
-            {
-                // Both have data, so concatenate with "AND"
-                combinedParentGuardian = parentGuardian + " AND " + parentGuardian2;
-            }
-            else
-            {
-                // Use whichever has data, if any
-                combinedParentGuardian = !string.IsNullOrEmpty(parentGuardian) ? parentGuardian : parentGuardian2;
-            }
+        //    if (!string.IsNullOrEmpty(parentGuardian) && !string.IsNullOrEmpty(parentGuardian2))
+        //    {
+        //        // Both have data, so concatenate with "AND"
+        //        combinedParentGuardian = parentGuardian + " AND " + parentGuardian2;
+        //    }
+        //    else
+        //    {
+        //        // Use whichever has data, if any
+        //        combinedParentGuardian = !string.IsNullOrEmpty(parentGuardian) ? parentGuardian : parentGuardian2;
+        //    }
 
-            // MySQL connection string
-            // Load database configuration
-            var config = ConfigHelper.LoadConfig();
-            string connectionString = ""; // Declare outside
+        //    // MySQL connection string
+        //    // Load database configuration
+        //    var config = ConfigHelper.LoadConfig();
+        //    string connectionString = ""; // Declare outside
 
-            if (config.Count > 0)
-            {
-                connectionString = $"Server={config["Server"]};Port={config["Port"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
-            }
+        //    if (config.Count > 0)
+        //    {
+        //        connectionString = $"Server={config["Server"]};Port={config["Port"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+        //    }
 
-            // Insert query
-            string query = "INSERT INTO certificationrecords_nolandholding (MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type) " +
-                           "VALUES (@MaritalStatus, @ParentGuardian, @ParentGuardian2, @Barangay, @Patient, @Hospital, @HospitalAddress, @CertificationDate, @CertificationTime, @AmountPaid, @ReceiptNo, @ReceiptDateIssued, @PlaceIssued, @Type)";
+        //    // Insert query
+        //    string query = "INSERT INTO certificationrecords_nolandholding (MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type) " +
+        //                   "VALUES (@MaritalStatus, @ParentGuardian, @ParentGuardian2, @Barangay, @Patient, @Hospital, @HospitalAddress, @CertificationDate, @CertificationTime, @AmountPaid, @ReceiptNo, @ReceiptDateIssued, @PlaceIssued, @Type)";
 
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        // Use the combined ParentGuardian value
-                        cmd.Parameters.AddWithValue("@MaritalStatus", maritalStatus);
-                        cmd.Parameters.AddWithValue("@ParentGuardian", combinedParentGuardian + " ");
-                        cmd.Parameters.AddWithValue("@ParentGuardian2", string.Empty);  // We don't need this anymore
-                        cmd.Parameters.AddWithValue("@Barangay", barangay);
-                        cmd.Parameters.AddWithValue("@Patient", patient);
-                        cmd.Parameters.AddWithValue("@Hospital", hospital);
-                        cmd.Parameters.AddWithValue("@HospitalAddress", hospitalAddress);
-                        cmd.Parameters.AddWithValue("@CertificationDate", certificationDate);
-                        cmd.Parameters.AddWithValue("@CertificationTime", certificationTime);  // Add the TimeSpan parameter directly
-                        cmd.Parameters.AddWithValue("@AmountPaid", amountpaid);
-                        // Only add ReceiptDateIssued if AmountPaid is greater than ₱0.00
-                        if (amountpaid != "₱0.00")
-                        {
-                            cmd.Parameters.AddWithValue("@ReceiptNo", receiptno);
-                            cmd.Parameters.AddWithValue("@ReceiptDateIssued", receiptdateissued);
-                            cmd.Parameters.AddWithValue("@PlaceIssued", placeissued);
-                        }
-                        else
-                        {
-                            // Prevent inserting the ReceiptDateIssued if the amount is zero
-                            cmd.Parameters.AddWithValue("@ReceiptNo", DBNull.Value);
-                            cmd.Parameters.AddWithValue("@ReceiptDateIssued", DBNull.Value);
-                            cmd.Parameters.AddWithValue("@PlaceIssued", DBNull.Value);
-                        }
-                        cmd.Parameters.AddWithValue("@Type", typeset);
+        //    try
+        //    {
+        //        using (MySqlConnection conn = new MySqlConnection(connectionString))
+        //        {
+        //            conn.Open();
+        //            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+        //            {
+        //                // Use the combined ParentGuardian value
+        //                cmd.Parameters.AddWithValue("@MaritalStatus", maritalStatus);
+        //                cmd.Parameters.AddWithValue("@ParentGuardian", combinedParentGuardian + " ");
+        //                cmd.Parameters.AddWithValue("@ParentGuardian2", string.Empty);  // We don't need this anymore
+        //                cmd.Parameters.AddWithValue("@Barangay", barangay);
+        //                cmd.Parameters.AddWithValue("@Patient", patient);
+        //                cmd.Parameters.AddWithValue("@Hospital", hospital);
+        //                cmd.Parameters.AddWithValue("@HospitalAddress", hospitalAddress);
+        //                cmd.Parameters.AddWithValue("@CertificationDate", certificationDate);
+        //                cmd.Parameters.AddWithValue("@CertificationTime", certificationTime);  // Add the TimeSpan parameter directly
+        //                cmd.Parameters.AddWithValue("@AmountPaid", amountpaid);
+        //                // Only add ReceiptDateIssued if AmountPaid is greater than ₱0.00
+        //                if (amountpaid != "₱0.00")
+        //                {
+        //                    cmd.Parameters.AddWithValue("@ReceiptNo", receiptno);
+        //                    cmd.Parameters.AddWithValue("@ReceiptDateIssued", receiptdateissued);
+        //                    cmd.Parameters.AddWithValue("@PlaceIssued", placeissued);
+        //                }
+        //                else
+        //                {
+        //                    // Prevent inserting the ReceiptDateIssued if the amount is zero
+        //                    cmd.Parameters.AddWithValue("@ReceiptNo", DBNull.Value);
+        //                    cmd.Parameters.AddWithValue("@ReceiptDateIssued", DBNull.Value);
+        //                    cmd.Parameters.AddWithValue("@PlaceIssued", DBNull.Value);
+        //                }
+        //                cmd.Parameters.AddWithValue("@Type", typeset);
 
-                        cmd.ExecuteNonQuery();
-                    }
-                }
+        //                cmd.ExecuteNonQuery();
+        //            }
+        //        }
 
-                // Show success message
-                //MessageBox.Show("Data Saved Successfully");
-                LoadDatabase();
+        //        // Show success message
+        //        //MessageBox.Show("Data Saved Successfully");
+        //        LoadDatabase();
 
-                // Fetch only the latest saved record for printing
-                DataTable reportData = GetCertificationData();  // This method must return the latest entry
+        //        // Fetch only the latest saved record for printing
+        //        DataTable reportData = GetCertificationData();  // This method must return the latest entry
 
-                if (reportData.Rows.Count == 0)
-                {
-                    MessageBox.Show("No records found for printing.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
+        //        if (reportData.Rows.Count == 0)
+        //        {
+        //            MessageBox.Show("No records found for printing.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //            return;
+        //        }
 
-                // Open the Report Form with the latest record
-                if (comboBoxTypeList.SelectedItem != null)
-                {
-                    string selectedType = comboBoxTypeList.SelectedItem.ToString(); // Get selected type
-                    ReportForm reportForm = new ReportForm(reportData, selectedType); // Pass only reportData and selectedType
-                    reportForm.ShowDialog();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }
-        }
+        //        // Open the Report Form with the latest record
+        //        if (comboBoxTypeList.SelectedItem != null)
+        //        {
+        //            string selectedType = comboBoxTypeList.SelectedItem.ToString(); // Get selected type
+        //            ReportForm reportForm = new ReportForm(reportData, selectedType); // Pass only reportData and selectedType
+        //            reportForm.ShowDialog();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Error: " + ex.Message);
+        //    }
+        //}
 
         private void radioOthers_CheckedChanged(object sender, EventArgs e)
         {
@@ -1015,8 +1093,9 @@ namespace NoLandholdingApp
         {
             // Create the TextBox (Search Box)
             txtSearch = new TextBox();
+            txtSearch.TabIndex = 6;
             txtSearch.Size = new Size(200, 17);
-            txtSearch.Location = new Point(60, 279);
+            txtSearch.Location = new Point(40, 295);
             txtSearch.BorderStyle = BorderStyle.FixedSingle;
 
             // Set placeholder initially
@@ -1065,7 +1144,7 @@ namespace NoLandholdingApp
             // Create the PictureBox (Magnifying Glass)
             picSearch = new PictureBox();
             picSearch.Size = new Size(17, 17);
-            picSearch.Location = new Point(txtSearch.Width - 20, txtSearch.Top - 277); // Position inside TextBox
+            picSearch.Location = new Point(txtSearch.Width - 20, txtSearch.Top - 293); // Position inside TextBox
             picSearch.SizeMode = PictureBoxSizeMode.StretchImage;
             picSearch.BackColor = Color.Transparent; // Ensure no background
 
@@ -1135,10 +1214,28 @@ namespace NoLandholdingApp
             {
                 // Populate the DataGridView in the current form with the results
                 dataGridViewResults.DataSource = reportData;
+
+                // Select the first cell in the results
+                _lastClickedRow = 0; // First row
+                _lastClickedCol = 1; // First column (or set to a relevant column index)
+
+                // Refresh the DataGridView to apply the new selection formatting
+                dataGridViewResults.Invalidate();
             }
             else
             {
                 MessageBox.Show("No results found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Reset selection if no results found
+                _lastClickedRow = -1;
+                _lastClickedCol = -1;
+                dataGridViewResults.Invalidate();
+
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    txtSearch.Focus();
+                    txtSearch.SelectAll();
+                });
             }
 
             // Highlight the TextBox background color to pastel yellow
@@ -1156,12 +1253,14 @@ namespace NoLandholdingApp
         }
 
 
+
         private DataTable GetReportData(string searchTerm)
         {
             // Create a DataTable to hold the results
             DataTable dt = new DataTable();
 
             // Add columns to the DataTable
+            dt.Columns.Add(" ");
             dt.Columns.Add("Patient");
             dt.Columns.Add("Barangay");
             dt.Columns.Add("MaritalStatus");
@@ -1261,10 +1360,28 @@ namespace NoLandholdingApp
         {
             if (e.KeyCode == Keys.F5)  // Check if F5 was pressed
             {
-                // Call ReloadData to refresh the data
+                // Call LoadDatabase to refresh the data
                 LoadDatabase();
+
+                // Ensure at least one row exists before selecting
+                if (dataGridViewResults.Rows.Count > 0)
+                {
+                    _lastClickedRow = 0; // First row
+                    //_lastClickedCol = 0; // First column (or relevant column index)
+
+                    // Refresh DataGridView to apply selection highlight
+                    dataGridViewResults.Invalidate();
+                }
+                else
+                {
+                    // Reset selection if no data is available
+                    _lastClickedRow = -1;
+                    _lastClickedCol = -1;
+                    dataGridViewResults.Invalidate();
+                }
             }
         }
+
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
@@ -1298,11 +1415,6 @@ namespace NoLandholdingApp
 
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
-        {
-            LoadDatabase();
-        }
-
         private void shutdownToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -1313,52 +1425,52 @@ namespace NoLandholdingApp
 
         }
 
-        private void LoadComboBoxItemsFromMySQL()
-        {
-            // MySQL connection string
-            // Load database configuration
-            var config = ConfigHelper.LoadConfig();
-            string connectionString = ""; // Declare outside
+        //private void LoadComboBoxItemsFromMySQL()
+        //{
+        //    // MySQL connection string
+        //    // Load database configuration
+        //    var config = ConfigHelper.LoadConfig();
+        //    string connectionString = ""; // Declare outside
 
-            if (config.Count > 0)
-            {
-                connectionString = $"Server={config["Server"]};Port={config["Port"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
-            }
+        //    if (config.Count > 0)
+        //    {
+        //        connectionString = $"Server={config["Server"]};Port={config["Port"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+        //    }
 
-            string query = "SELECT typesets FROM sys_nolandholding_internaltypesets ";
+        //    string query = "SELECT typesets FROM sys_nolandholding_internaltypesets ";
 
-            try
-            {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
-                {
-                    connection.Open();
+        //    try
+        //    {
+        //        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        //        {
+        //            connection.Open();
 
-                    using (var command = new MySqlCommand(query, connection))
-                    using (var reader = command.ExecuteReader())
-                    {
-                        comboBoxTypeList.Items.Clear();
+        //            using (var command = new MySqlCommand(query, connection))
+        //            using (var reader = command.ExecuteReader())
+        //            {
+        //                comboBoxTypeList.Items.Clear();
 
-                        while (reader.Read())
-                        {
-                            if (!reader.IsDBNull(0))
-                            {
-                                comboBoxTypeList.Items.Add(reader.GetString(0));
-                            }
-                        }
-                    }
-                }
+        //                while (reader.Read())
+        //                {
+        //                    if (!reader.IsDBNull(0))
+        //                    {
+        //                        comboBoxTypeList.Items.Add(reader.GetString(0));
+        //                    }
+        //                }
+        //            }
+        //        }
 
-                if (comboBoxTypeList.Items.Count > 0)
-                {
-                    comboBoxTypeList.SelectedIndex = 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading data from MySQL: " + ex.Message);
-                Console.WriteLine($"Exception: {ex}");
-            }
-        }
+        //        if (comboBoxTypeList.Items.Count > 0)
+        //        {
+        //            comboBoxTypeList.SelectedIndex = 0;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Error loading data from MySQL: " + ex.Message);
+        //        Console.WriteLine($"Exception: {ex}");
+        //    }
+        //}
 
         private void linkHospitalization_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -1407,6 +1519,28 @@ namespace NoLandholdingApp
             // Pass the reference of formInput if opened from preferences, else null
             SettingsForm settingsForm = new SettingsForm(); // Pass 'this' (formInput) reference
             settingsForm.ShowDialog();
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadDatabase();
+
+            // Ensure at least one row exists before selecting
+            if (dataGridViewResults.Rows.Count > 0)
+            {
+                _lastClickedRow = 0; // First row
+                                     //_lastClickedCol = 0; // First column (or relevant column index)
+
+                // Refresh DataGridView to apply selection highlight
+                dataGridViewResults.Invalidate();
+            }
+            else
+            {
+                // Reset selection if no data is available
+                _lastClickedRow = -1;
+                _lastClickedCol = -1;
+                dataGridViewResults.Invalidate();
+            }
         }
     }
 }
