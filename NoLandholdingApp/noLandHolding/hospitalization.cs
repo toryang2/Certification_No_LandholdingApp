@@ -253,8 +253,8 @@ namespace NoLandholdingApp.noLandHolding
             }
 
             // Insert query
-            string query = "INSERT INTO certificationrecords_nolandholding (MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type) " +
-                            "VALUES (@MaritalStatus, @ParentGuardian, @ParentGuardian2, @Barangay, @Patient, @Hospital, @HospitalAddress, @CertificationDate, @CertificationTime, @AmountPaid, @ReceiptNo, @ReceiptDateIssued, @PlaceIssued, @Type)";
+            string query = "INSERT INTO certificationrecords_nolandholding (MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type, userInitials, Signatory) " +
+                            "VALUES (@MaritalStatus, @ParentGuardian, @ParentGuardian2, @Barangay, @Patient, @Hospital, @HospitalAddress, @CertificationDate, @CertificationTime, @AmountPaid, @ReceiptNo, @ReceiptDateIssued, @PlaceIssued, @Type, @userInitials, @Signatory)";
 
             try
             {
@@ -289,6 +289,10 @@ namespace NoLandholdingApp.noLandHolding
                             cmd.Parameters.AddWithValue("@PlaceIssued", DBNull.Value);
                         }
                         cmd.Parameters.AddWithValue("@Type", typeset);
+                        cmd.Parameters.AddWithValue("@userInitials", UserSession.Initials);
+
+                        string latestAssessor = SignatoryRepository.GetLatestAssessor();
+                        cmd.Parameters.AddWithValue(@"Signatory", latestAssessor);
 
                         cmd.ExecuteNonQuery();
                     }

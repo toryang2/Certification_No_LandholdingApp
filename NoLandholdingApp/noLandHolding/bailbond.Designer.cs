@@ -226,6 +226,7 @@
             this.btnPrintSave.TabIndex = 150;
             this.btnPrintSave.Text = "Print/Save";
             this.btnPrintSave.UseVisualStyleBackColor = false;
+            this.btnPrintSave.Click += new System.EventHandler(this.btnPrintSave_Click_1);
             // 
             // checkBoxSingle
             // 

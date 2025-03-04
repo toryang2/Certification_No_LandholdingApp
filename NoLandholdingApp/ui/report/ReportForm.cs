@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CommonLibrary;
 using Microsoft.Reporting.WinForms;
 
 namespace NoLandholdingApp
@@ -69,6 +70,14 @@ namespace NoLandholdingApp
             ReportDataSource rds = new ReportDataSource("nolandholding_dataset", reportData);
             reportViewer1.LocalReport.DataSources.Add(rds);
 
+            // === Add this part ===
+            //var parameters = new ReportParameter[]
+            //{
+            //    new ReportParameter("LoggedInUserInitials", UserSession.Initials ?? string.Empty)
+            //};
+            //reportViewer1.LocalReport.SetParameters(parameters);
+            // =====================
+
             // Refresh the report
             reportViewer1.LocalReport.Refresh();
             reportViewer1.RefreshReport();
@@ -78,6 +87,7 @@ namespace NoLandholdingApp
             // Debugging: Log the selected report and number of records
             Console.WriteLine($"Selected Report: {reportPath}");
             Console.WriteLine($"Records in report: {reportData.Rows.Count}");
+            Console.WriteLine($"User Initials Passed: {UserSession.Initials}");  // For debugging
 
         }
 
@@ -92,21 +102,7 @@ namespace NoLandholdingApp
 
         private void PrintReport()
         {
-            try
-            {
-                if (reportViewer1.LocalReport.GetParameters().Count > 0)
-                {
-                    reportViewer1.PrintDialog();
-                }
-                else
-                {
-                    MessageBox.Show("No preview available. Please ensure the report is loaded correctly.", "Print Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred while printing: {ex.Message}", "Print Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            reportViewer1.PrintDialog();
         }
 
         private void reportViewer1_Load(object sender, EventArgs e)

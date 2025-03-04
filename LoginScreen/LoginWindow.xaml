@@ -12,14 +12,83 @@
     </Window.Background>
     <Grid Background="White">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="49*"/>
-            <ColumnDefinition Width="43*"/>
+            <ColumnDefinition Width="292*"/>
+            <ColumnDefinition Width="293*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.ColumnSpan="2"/>
-        <Image x:Name="imgBackground" Source="C:\Users\user\source\repos\NoLandholdingApp\LoginScreen\login_ui.png" Grid.ColumnSpan="2" Margin="-18,-42,-30,-21" Opacity="0.8"/>
+        <StackPanel Grid.ColumnSpan="2">
+            <Button x:Name="ExitButton"
+        Content="✕"
+        Width="30"
+        Height="30"
+        HorizontalAlignment="Right"
+        Margin="0,10,10,0"
+        Click="ExitButton_Click"
+        BorderBrush="Transparent"
+        Background="Transparent"
+        OverridesDefaultStyle="True">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                    Background="#00DDDDDD"
+                    CornerRadius="0"
+                    BorderThickness="0">
+                            <TextBlock x:Name="contentPresenter"
+                           Text="{TemplateBinding Content}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Foreground="Black"
+                           FontWeight="Bold"
+                           FontSize="16"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border"
+                                                Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                To="#FFFF0000"
+                                                Duration="0:0:0.2"/>
+                                            <ColorAnimation Storyboard.TargetName="contentPresenter"
+                                                Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                                                To="White"
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border"
+                                                Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                To="#00DDDDDD"
+                                                Duration="0:0:0.2"/>
+                                            <ColorAnimation Storyboard.TargetName="contentPresenter"
+                                                Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                                                To="Black"
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <StackPanel.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFC3F5ED"/>
+                    <GradientStop Color="#FF6DA7D4" Offset="1"/>
+                </LinearGradientBrush>
+            </StackPanel.Background>
+        </StackPanel>
+        <!--<Image x:Name="imgBackground" Source="C:\Users\user\source\repos\NoLandholdingApp\LoginScreen\login_ui.png" Grid.ColumnSpan="2" Margin="-23,-42,-25,-21" Opacity="0.8"/>-->
         <Rectangle x:Name="recUsername" HorizontalAlignment="Left" Height="43" Margin="116,264,0,0" Stroke="#00000000" VerticalAlignment="Top" Width="351" Fill="White" Opacity="0.8" Grid.ColumnSpan="2"/>
-        <TextBox Name="txtUsername" Padding="55,9.5,0,0" TextWrapping="Wrap" Margin="116,264,118,0" FontSize="16" VerticalAlignment="Top" BorderBrush="#00000000" Height="43" CaretBrush="Black" Foreground="#FF6B6B6B" Background="#00000000" Grid.ColumnSpan="2" SelectionBrush="#00000000"/>
+        <TextBox Name="txtUsername" Padding="55,9.5,0,0" TextWrapping="Wrap" Margin="116,264,118,0" FontSize="16" VerticalAlignment="Top" BorderBrush="#00000000" Height="43" CaretBrush="Black" Foreground="#FF6B6B6B" Background="#00000000" Grid.ColumnSpan="2"/>
         <TextBlock Name="PlaceholderText" Padding="55,9.5,0,0"
                Text="Username" 
                Foreground="Gray"
@@ -36,10 +105,28 @@
             HorizontalAlignment="Left"
             Margin="116,327,0,0"
             IsHitTestVisible="False" Height="43" Width="351" FontSize="16" Grid.ColumnSpan="2"/>
-        <CheckBox x:Name="checkBoxRememberMe" Content="Remember me" HorizontalAlignment="Left" Margin="116,391,0,0" VerticalAlignment="Top" Background="#FF182B42" Foreground="#FFD9DCE5" BorderBrush="#00000000" IsChecked="False" Width="105"/>
+        <CheckBox x:Name="checkBoxRememberMe" Content="Remember me" HorizontalAlignment="Left" Margin="116,391,0,0" VerticalAlignment="Top" Background="#FF182B42" Foreground="#FFD9DCE5" BorderBrush="#00000000" IsChecked="False" Width="105" Height="16"/>
+        <Rectangle x:Name="recFullName" HorizontalAlignment="Left" Height="43" Margin="116,390,0,0" Stroke="#00000000" VerticalAlignment="Top" Width="351" Fill="White" Opacity="0.8" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="txtFullName" Padding="55,9.5,0,0" TextWrapping="Wrap" Margin="116,390,118,0" FontSize="16" VerticalAlignment="Top" BorderBrush="#00000000" Height="43" CaretBrush="Black" Foreground="#FF6B6B6B" Background="#00000000" Grid.ColumnSpan="2"/>
+        <TextBlock x:Name="PlaceholderTextFullName" Padding="55,9.5,0,0"
+            Text="Full Name" 
+            Foreground="Gray"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Margin="116,390,0,0"
+            IsHitTestVisible="False" Height="43" Width="351" FontSize="16" Grid.ColumnSpan="2"/>
+        <Rectangle x:Name="recInitial" HorizontalAlignment="Left" Height="43" Margin="116,454,0,0" Stroke="#00000000" VerticalAlignment="Top" Width="351" Fill="White" Opacity="0.8" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="txtInitial" Padding="55,9.5,0,0" TextWrapping="Wrap" Margin="116,454,118,0" FontSize="16" VerticalAlignment="Top" BorderBrush="#00000000" Height="43" CaretBrush="Black" Foreground="#FF6B6B6B" Background="#00000000" Grid.ColumnSpan="2"/>
+        <TextBlock x:Name="PlaceholderTextInitial" Padding="55,9.5,0,0"
+            Text="Initial" 
+            Foreground="Gray"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Margin="116,454,0,0"
+            IsHitTestVisible="False" Height="43" Width="351" FontSize="16" Grid.ColumnSpan="2"/>
         <Button x:Name="btnLogin" Content="LOGIN" HorizontalAlignment="Left" Margin="198,433,0,0" 
         VerticalAlignment="Top" Grid.ColumnSpan="2" Height="42" Width="188"
-        Foreground="#FFABABAB" BorderBrush="Transparent" Click="BtnLogin_Click">
+        Foreground="#FFABABAB" BorderBrush="Transparent" Click="BtnLogin_Click" FontWeight="Bold">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="buttonBorder" 
@@ -61,8 +148,8 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Image x:Name="imgUsername" HorizontalAlignment="Left" Height="20" Margin="141,276,0,0" VerticalAlignment="Top" Width="20" Source="C:\Users\user\source\repos\NoLandholdingApp\LoginScreen\Assets\username.png"/>
-        <Image x:Name="imgPassword" HorizontalAlignment="Left" Height="20" Margin="141,338,0,0" VerticalAlignment="Top" Width="20" Source="C:\Users\user\source\repos\NoLandholdingApp\LoginScreen\Assets\password.png"/>
+        <Image x:Name="imgUsername" HorizontalAlignment="Center" Height="20" Margin="0,276,0,0" VerticalAlignment="Top" Width="20" Source="C:\Users\user\source\repos\NoLandholdingApp\LoginScreen\Assets\username.png"/>
+        <Image x:Name="imgPassword" HorizontalAlignment="Center" Height="20" Margin="0,338,0,0" VerticalAlignment="Top" Width="20" Source="C:\Users\user\source\repos\NoLandholdingApp\LoginScreen\Assets\password.png"/>
         <Button x:Name="btnCreate" Content="Create Account" Margin="166,571,10,0" 
         VerticalAlignment="Top" Height="19" Foreground="#FF18254C" 
         Background="Transparent" BorderBrush="Transparent" Grid.Column="1" 
@@ -92,8 +179,16 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Image Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="127" Margin="234,90,0,0" VerticalAlignment="Top" Width="127" Source="C:\Users\user\source\repos\NoLandholdingApp\LoginScreen\Assets\assessorlogo.jpg"/>
+        <Image Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="127" Margin="229,90,0,0" VerticalAlignment="Top" Width="127" Source="C:\Users\user\source\repos\NoLandholdingApp\LoginScreen\Assets\assessorlogo.jpg"/>
 
+        <Label x:Name="lblMessage"
+               Content=""
+           HorizontalAlignment="Center"
+           VerticalAlignment="Bottom"
+           FontSize="12"
+           Foreground="Red"
+           Grid.ColumnSpan="2"
+           Margin="0,0,0,7"/>
 
     </Grid>
     <Window.Resources>

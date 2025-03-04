@@ -303,6 +303,10 @@ namespace NoLandholdingApp.dataset {
             
             private global::System.Data.DataColumn columnPlaceIssued;
             
+            private global::System.Data.DataColumn columnuserInitials;
+            
+            private global::System.Data.DataColumn columnSignatory;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public noLandholding_DataSourceDataTable() {
@@ -434,6 +438,22 @@ namespace NoLandholdingApp.dataset {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn userInitialsColumn {
+                get {
+                    return this.columnuserInitials;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn SignatoryColumn {
+                get {
+                    return this.columnSignatory;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -469,7 +489,7 @@ namespace NoLandholdingApp.dataset {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public noLandholding_DataSourceRow AddnoLandholding_DataSourceRow(string MaritalStatus, string ParentGuardian, string Barangay, string Patient, string Hospital, string HospitalAddress, string CertificationDate, string CertificationTime, string AmountPaid, string ReceiptNo, string ReceiptDateIssued, string PlaceIssued) {
+            public noLandholding_DataSourceRow AddnoLandholding_DataSourceRow(string MaritalStatus, string ParentGuardian, string Barangay, string Patient, string Hospital, string HospitalAddress, string CertificationDate, string CertificationTime, string AmountPaid, string ReceiptNo, string ReceiptDateIssued, string PlaceIssued, string userInitials, string Signatory) {
                 noLandholding_DataSourceRow rownoLandholding_DataSourceRow = ((noLandholding_DataSourceRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         MaritalStatus,
@@ -483,7 +503,9 @@ namespace NoLandholdingApp.dataset {
                         AmountPaid,
                         ReceiptNo,
                         ReceiptDateIssued,
-                        PlaceIssued};
+                        PlaceIssued,
+                        userInitials,
+                        Signatory};
                 rownoLandholding_DataSourceRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rownoLandholding_DataSourceRow);
                 return rownoLandholding_DataSourceRow;
@@ -525,6 +547,8 @@ namespace NoLandholdingApp.dataset {
                 this.columnReceiptNo = base.Columns["ReceiptNo"];
                 this.columnReceiptDateIssued = base.Columns["ReceiptDateIssued"];
                 this.columnPlaceIssued = base.Columns["PlaceIssued"];
+                this.columnuserInitials = base.Columns["userInitials"];
+                this.columnSignatory = base.Columns["Signatory"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -554,6 +578,10 @@ namespace NoLandholdingApp.dataset {
                 base.Columns.Add(this.columnReceiptDateIssued);
                 this.columnPlaceIssued = new global::System.Data.DataColumn("PlaceIssued", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPlaceIssued);
+                this.columnuserInitials = new global::System.Data.DataColumn("userInitials", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnuserInitials);
+                this.columnSignatory = new global::System.Data.DataColumn("Signatory", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSignatory);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnCertificationDate}, true));
                 this.columnPatient.AllowDBNull = false;
@@ -889,6 +917,39 @@ namespace NoLandholdingApp.dataset {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string userInitials {
+                get {
+                    try {
+                        return ((string)(this[this.tablenoLandholding_DataSource.userInitialsColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'userInitials\' in table \'noLandholding_DataSource\' is DBNull" +
+                                ".", e);
+                    }
+                }
+                set {
+                    this[this.tablenoLandholding_DataSource.userInitialsColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string Signatory {
+                get {
+                    try {
+                        return ((string)(this[this.tablenoLandholding_DataSource.SignatoryColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Signatory\' in table \'noLandholding_DataSource\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablenoLandholding_DataSource.SignatoryColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsMaritalStatusNull() {
                 return this.IsNull(this.tablenoLandholding_DataSource.MaritalStatusColumn);
             }
@@ -1005,6 +1066,30 @@ namespace NoLandholdingApp.dataset {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetPlaceIssuedNull() {
                 this[this.tablenoLandholding_DataSource.PlaceIssuedColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsuserInitialsNull() {
+                return this.IsNull(this.tablenoLandholding_DataSource.userInitialsColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetuserInitialsNull() {
+                this[this.tablenoLandholding_DataSource.userInitialsColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsSignatoryNull() {
+                return this.IsNull(this.tablenoLandholding_DataSource.SignatoryColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetSignatoryNull() {
+                this[this.tablenoLandholding_DataSource.SignatoryColumn] = global::System.Convert.DBNull;
             }
         }
         

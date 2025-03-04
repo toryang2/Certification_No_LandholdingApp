@@ -20,6 +20,8 @@ using System.Windows.Forms.VisualStyles;
 using System.Security.Cryptography;
 using NoLandholdingApp.noLandHolding;
 using CommonLibrary;
+using Org.BouncyCastle.Asn1.Ocsp;
+using LoginScreen;
 
 namespace NoLandholdingApp
 {
@@ -100,7 +102,7 @@ namespace NoLandholdingApp
             }
 
             // Fetch only the latest record based on the highest ID (newest entry)
-            string query = "SELECT MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type " +
+            string query = "SELECT MaritalStatus, ParentGuardian, ParentGuardian2, Barangay, Patient, Hospital, HospitalAddress, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type, userInitials, Signatory " +
                            "FROM certificationrecords_nolandholding " +
                            "ORDER BY ID DESC LIMIT 1";  // Order by ID to get the latest
 
@@ -146,6 +148,7 @@ namespace NoLandholdingApp
             txtSearch.BringToFront();
 
             LoadDatabase();
+            ApplyAccessControl();
         }
 
         private void SetFormProperties()
@@ -170,20 +173,39 @@ namespace NoLandholdingApp
             // Add the Panel to the form
             this.Controls.Add(panel);
             InitializeStatusStrip();
+
+            // Get file version from assembly file
+            var fileVersion = System.Diagnostics.FileVersionInfo
+                .GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                .FileVersion;
+
+            // Set version label text using file version (not assembly version)
+            versionLabel.Text = $"Version: {fileVersion}";
         }
+
+        private ToolStripStatusLabel statusLabel;
+        private ToolStripStatusLabel versionLabel;
 
         private void InitializeStatusStrip()
         {
             // Create and configure the StatusStrip
             StatusStrip statusStrip = new StatusStrip
             {
-                Dock = DockStyle.Bottom // Dock it to the bottom of the form
+                Dock = DockStyle.Bottom,
+                SizingGrip = false,
+                BackColor = SystemColors.Control
             };
 
-            ToolStripStatusLabel statusLabel = new ToolStripStatusLabel("Ready");
+            // Create the "Ready" status label
+            statusLabel = new ToolStripStatusLabel("Ready");
+
+            // Create the version label (initially empty, filled in SetUpPanel)
+            versionLabel = new ToolStripStatusLabel();
+
+            // Add both labels to the status strip
             statusStrip.Items.Add(statusLabel);
-            statusStrip.SizingGrip = false;
-            statusStrip.BackColor = SystemColors.Control;
+            statusStrip.Items.Add(new ToolStripStatusLabel { Spring = true }); // Spacer
+            statusStrip.Items.Add(versionLabel);
 
             // Add the StatusStrip to the form
             this.Controls.Add(statusStrip);
@@ -397,6 +419,7 @@ namespace NoLandholdingApp
             dataGridViewResults.Columns["Receipt Date Issued"].Width = 120;
             dataGridViewResults.Columns["Place Issued"].Width = 140;
             dataGridViewResults.Columns["Type"].Width = 150;
+            dataGridViewResults.Columns["user Initials"].Width = 20;
         }
 
         //private void SetTextBoxCharacterCasing()
@@ -492,6 +515,9 @@ namespace NoLandholdingApp
 
             // Bind the fetched data to the DataGridView
             dataGridViewResults.DataSource = reportData;
+
+            dataGridViewResults.Columns["user Initials"].Visible = false;
+            dataGridViewResults.Columns["Signatory"].Visible = false;
             ResizeDataGridViewColumns();
         }
 
@@ -547,9 +573,11 @@ namespace NoLandholdingApp
                 string formattedDate = certificationDate.ToString("MM-dd-yyyy"); // Formatting Date
                 string formattedTime = certificationTime.ToString("hh:mm:ss tt"); // Formatting Time to 12-hour format
                 string typeset = selectedRow.Cells["Type"].Value.ToString();
+                string userinitials = selectedRow.Cells["user Initials"].Value.ToString();
+                string latestsignatory = selectedRow.Cells["Signatory"].Value.ToString();
 
                 // Pass the selected data to the report form and show it
-                DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued, typeset);
+                DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued, typeset, userinitials, latestsignatory);
                 SearchResultReportForm reportForm = new SearchResultReportForm(selectedData, typeset);
                 reportForm.ShowDialog();
             }
@@ -593,9 +621,11 @@ namespace NoLandholdingApp
                     string formattedDate = certificationDate.ToString("MM-dd-yyyy"); // Formatting Date
                     string formattedTime = certificationTime.ToString("hh:mm:ss tt"); // Formatting Time to 12-hour format
                     string typeset = selectedRow.Cells["Type"].Value.ToString();
+                    string userinitials = selectedRow.Cells["user Initials"].Value.ToString();
+                    string latestsignatory = selectedRow.Cells["Signatory"].Value.ToString();
 
                     // Pass the selected data to the report form and show it
-                    DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued, typeset);
+                    DataTable selectedData = GetSelectedData(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, formattedDate, formattedTime, amountPaid, receiptNo, receiptDateIssued, placeIssued, typeset, userinitials, latestsignatory);
                     SearchResultReportForm reportForm = new SearchResultReportForm(selectedData, typeset);
                     reportForm.ShowDialog();
                 }
@@ -603,7 +633,7 @@ namespace NoLandholdingApp
         }
 
         // Method to get selected data (same logic as in SearchResultsForm)
-        private DataTable GetSelectedData(string maritalstatus, string parentguardian, string patient, string hospital, string hospitaladdress, string barangay, string certificationDate, string certificationTime, string amountPaid, string receiptNo, string receiptDateIssued, string placeIssued, string typeset)
+        private DataTable GetSelectedData(string maritalstatus, string parentguardian, string patient, string hospital, string hospitaladdress, string barangay, string certificationDate, string certificationTime, string amountPaid, string receiptNo, string receiptDateIssued, string placeIssued, string typeset, string userinitials, string latestsignatory)
         {
             DataTable selectedData = new DataTable();
             selectedData.Columns.Add("MaritalStatus");
@@ -619,9 +649,11 @@ namespace NoLandholdingApp
             selectedData.Columns.Add("ReceiptDateIssued");
             selectedData.Columns.Add("PlaceIssued");
             selectedData.Columns.Add("Type");
+            selectedData.Columns.Add("userInitials");
+            selectedData.Columns.Add("Signatory");
 
             // Add the selected row data into the DataTable
-            selectedData.Rows.Add(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, certificationDate, certificationTime, amountPaid, receiptNo, receiptDateIssued, placeIssued, typeset);
+            selectedData.Rows.Add(maritalstatus, parentguardian, patient, hospital, hospitaladdress, barangay, certificationDate, certificationTime, amountPaid, receiptNo, receiptDateIssued, placeIssued, typeset, userinitials, latestsignatory);
 
             return selectedData;
         }
@@ -1274,6 +1306,8 @@ namespace NoLandholdingApp
             dt.Columns.Add("ReceiptNo");
             dt.Columns.Add("ReceiptDateIssued");
             dt.Columns.Add("PlaceIssued");
+            dt.Columns.Add("userInitials");
+            dt.Columns.Add("Signatory");
 
             // Load database configuration
             var config = ConfigHelper.LoadConfig();
@@ -1286,7 +1320,7 @@ namespace NoLandholdingApp
 
 
             // SQL query to fetch data based on the search term
-            string query = "SELECT MaritalStatus, ParentGuardian, Patient, Hospital, HospitalAddress, Barangay, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type " +
+            string query = "SELECT MaritalStatus, ParentGuardian, Patient, Hospital, HospitalAddress, Barangay, CertificationDate, CertificationTime, AmountPaid, ReceiptNo, ReceiptDateIssued, PlaceIssued, Type, userInitials, Signatory " +
                            "FROM certificationrecords_nolandholding " +
                            "WHERE Patient LIKE @SearchTerm " +
                            "ORDER BY CertificationDate DESC, STR_TO_DATE(CertificationTime, '%h:%i:%s %p') DESC";  // Use DESC for descending order
@@ -1514,6 +1548,11 @@ namespace NoLandholdingApp
             philhealthForm.ShowDialog();
         }
 
+        private void ApplyAccessControl()
+        {
+            preferenceToolStripMenuItem.Enabled = UserSession.AccessLevel == 1;
+        }
+
         private void preferenceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Pass the reference of formInput if opened from preferences, else null
@@ -1542,5 +1581,58 @@ namespace NoLandholdingApp
                 dataGridViewResults.Invalidate();
             }
         }
+
+        private int GetUserAccessLevel(string username)
+        {
+            var config = ConfigHelper.LoadConfig();
+            string connectionString = $"Server={config["Server"]};Port={config["Port"]};Database={config["Database"]};Uid={config["User"]};Pwd={config["Password"]};";
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "SELECT accessLevel FROM sys_users WHERE username = @username";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@username", username);
+
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : 0;
+                }
+            }
+        }
+
+        private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Logout();
+        }
+
+        private void Logout()
+        {
+            this.Hide();
+            // Clear session
+            UserSession.Username = null;
+            UserSession.Initials = null;
+            UserSession.AccessLevel = -1;  // or null if you prefer
+
+            // Apply access control based on "no user"
+            ApplyAccessControl();
+
+            // Open login window again
+            var loginWindow = new LoginWindow();
+            loginWindow.ShowDialog();
+
+            if (loginWindow.IsAuthenticated)
+            {
+                this.Show();
+                // After successful login, apply new user rights
+                ApplyAccessControl();
+            }
+            else
+            {
+                Application.Exit();  // If user cancels login, close app
+            }
+        }
+
     }
 }

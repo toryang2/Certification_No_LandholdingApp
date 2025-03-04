@@ -51,6 +51,7 @@ namespace NoLandholdingApp
             reportViewer1.LocalReport.ReportEmbeddedResource = reportPath;
             reportViewer1.LocalReport.DataSources.Clear();
             reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("nolandholding_dataset", reportData));
+
             reportViewer1.LocalReport.Refresh();
             reportViewer1.RefreshReport();
         }

@@ -280,6 +280,10 @@ namespace NoLandholdingApp.noLandHolding
                             cmd.Parameters.AddWithValue("@PlaceIssued", DBNull.Value);
                         }
                         cmd.Parameters.AddWithValue("@Type", typeset);
+                        cmd.Parameters.AddWithValue("@userInitials", UserSession.Initials);
+
+                        string latestAssessor = SignatoryRepository.GetLatestAssessor();
+                        cmd.Parameters.AddWithValue(@"Signatory", latestAssessor);
 
                         cmd.ExecuteNonQuery();
                     }

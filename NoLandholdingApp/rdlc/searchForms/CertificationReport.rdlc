@@ -103,6 +103,16 @@
                       <Color>#000000</Color>
                     </Style>
                   </TextRun>
+                  <TextRun>
+                    <Value> a</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Bookman Old Style</FontFamily>
+                      <FontWeight>Bold</FontWeight>
+                      <TextDecoration>None</TextDecoration>
+                      <Color>#000000</Color>
+                    </Style>
+                  </TextRun>
                 </TextRuns>
                 <Style>
                   <TextAlign>Center</TextAlign>
@@ -129,9 +139,9 @@
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
             <Top>4.61111in</Top>
-            <Left>3.9513in</Left>
+            <Left>4.42005in</Left>
             <Height>0.44792in</Height>
-            <Width>3.25125in</Width>
+            <Width>2.7825in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -384,7 +394,7 @@
                   </TextRun>
                   <TextRun>
                     <Label>CertificationDate</Label>
-                    <Value>=Replace(Fields!CertificationDate.Value, "-", "/")</Value>
+                    <Value>=FormatDateTime(Fields!CertificationDate.Value, DateFormat.ShortDate)</Value>
                     <Style>
                       <FontStyle>Normal</FontStyle>
                       <FontFamily>Times New Roman</FontFamily>
@@ -863,7 +873,7 @@ CStr(Year(Fields!CertificationDate.Value))</Value>
       <Width>8.27in</Width>
       <Page>
         <PageHeader>
-          <Height>0.83318in</Height>
+          <Height>0.82291in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -928,7 +938,7 @@ CStr(Year(Fields!CertificationDate.Value))</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>0.01389in</Top>
+              <Top>0.00362in</Top>
               <Left>1.79393in</Left>
               <Height>0.74984in</Height>
               <Width>4.7246in</Width>
@@ -943,25 +953,29 @@ CStr(Year(Fields!CertificationDate.Value))</Value>
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Line Name="Line1">
-              <Top>0.79152in</Top>
+            <Image Name="kitaotao_Logo">
+              <Source>Embedded</Source>
+              <Value>kitaotao</Value>
+              <Sizing>FitProportional</Sizing>
+              <Top>0.11354in</Top>
               <Left>1.09948in</Left>
-              <Height>0in</Height>
-              <Width>6.10307in</Width>
+              <Height>0.56597in</Height>
+              <Width>0.625in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
-                  <Style>Solid</Style>
+                  <Style>None</Style>
                 </Border>
               </Style>
-            </Line>
-            <Image Name="bagong_Pilipinas2">
+            </Image>
+            <Image Name="bagong_Pilipinas">
               <Source>Embedded</Source>
               <Value>bagongpilipinas</Value>
               <Sizing>FitProportional</Sizing>
-              <Left>6.38376in</Left>
-              <Height>0.76374in</Height>
-              <Width>0.81879in</Width>
+              <Top>0.11354in</Top>
+              <Left>6.58797in</Left>
+              <Height>0.56597in</Height>
+              <Width>0.61458in</Width>
               <ZIndex>2</ZIndex>
               <Style>
                 <Border>
@@ -969,20 +983,18 @@ CStr(Year(Fields!CertificationDate.Value))</Value>
                 </Border>
               </Style>
             </Image>
-            <Image Name="kitaotao_Logo2">
-              <Source>Embedded</Source>
-              <Value>kitaotao</Value>
-              <Sizing>FitProportional</Sizing>
+            <Line Name="Line1">
+              <Top>0.78125in</Top>
               <Left>1.09948in</Left>
-              <Height>0.81929in</Height>
-              <Width>0.80857in</Width>
+              <Height>0in</Height>
+              <Width>6.10307in</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <Border>
-                  <Style>None</Style>
+                  <Style>Solid</Style>
                 </Border>
               </Style>
-            </Image>
+            </Line>
           </ReportItems>
           <Style>
             <Border>

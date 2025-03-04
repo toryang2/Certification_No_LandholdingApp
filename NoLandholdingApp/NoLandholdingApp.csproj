@@ -241,6 +241,7 @@
     </Compile>
     <Compile Include="classes\printDialog.cs" />
     <Compile Include="ConfigHelper2.cs" />
+    <Compile Include="Properties\VersionInfo.cs" />
     <Compile Include="ui\DatabaseSetup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -306,6 +307,8 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="rdlc\CertificationReport-Scholarship.rdlc" />
+    <EmbeddedResource Include="rdlc\searchForms\CertificationReport-Scholarship.rdlc" />
+    <EmbeddedResource Include="rdlc\searchForms\CertificationReport.rdlc" />
     <EmbeddedResource Include="ui\DatabaseSetup.resx">
       <DependentUpon>DatabaseSetup.cs</DependentUpon>
     </EmbeddedResource>
@@ -426,4 +429,12 @@
     <Error Condition="!Exists('..\packages\MaterialDesignThemes.5.2.2-ci914\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MaterialDesignThemes.5.2.2-ci914\build\MaterialDesignThemes.targets'))" />
   </Target>
   <Import Project="..\packages\MaterialDesignThemes.5.2.2-ci914\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.5.2.2-ci914\build\MaterialDesignThemes.targets')" />
+
+<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+<Exec Command="powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;$(ProjectDir)GenerateVersion.ps1&quot;" />
+</Target>
+<ItemGroup>
+	<Compile Include="Properties\VersionInfo.cs" Condition="Exists('Properties\VersionInfo.cs')" />
+</ItemGroup>
+
 </Project>

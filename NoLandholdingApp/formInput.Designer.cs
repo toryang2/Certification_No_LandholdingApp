@@ -34,7 +34,7 @@
             this.changePasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shutdownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonAbout = new System.Windows.Forms.ToolStripButton();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.linkScholarship = new System.Windows.Forms.LinkLabel();
@@ -52,6 +52,7 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.linkLabelNoImprovement = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
+            this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -65,7 +66,7 @@
             this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownSystem,
-            this.toolStripButton1});
+            this.toolStripButtonAbout});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1784, 25);
@@ -78,6 +79,7 @@
             this.toolStripDropDownSystem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.changePasswordToolStripMenuItem,
             this.preferenceToolStripMenuItem,
+            this.logoutToolStripMenuItem,
             this.shutdownToolStripMenuItem});
             this.toolStripDropDownSystem.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownSystem.Image")));
             this.toolStripDropDownSystem.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -91,14 +93,14 @@
             // 
             this.changePasswordToolStripMenuItem.Image = global::NoLandholdingApp.Properties.Resources.change_password;
             this.changePasswordToolStripMenuItem.Name = "changePasswordToolStripMenuItem";
-            this.changePasswordToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.changePasswordToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.changePasswordToolStripMenuItem.Text = "ChangePassword";
             // 
             // preferenceToolStripMenuItem
             // 
             this.preferenceToolStripMenuItem.Image = global::NoLandholdingApp.Properties.Resources.preference;
             this.preferenceToolStripMenuItem.Name = "preferenceToolStripMenuItem";
-            this.preferenceToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.preferenceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.preferenceToolStripMenuItem.Text = "Preference";
             this.preferenceToolStripMenuItem.Click += new System.EventHandler(this.preferenceToolStripMenuItem_Click);
             // 
@@ -106,17 +108,17 @@
             // 
             this.shutdownToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("shutdownToolStripMenuItem.Image")));
             this.shutdownToolStripMenuItem.Name = "shutdownToolStripMenuItem";
-            this.shutdownToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.shutdownToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.shutdownToolStripMenuItem.Text = "Shutdown";
             // 
-            // toolStripButton1
+            // toolStripButtonAbout
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(44, 22);
-            this.toolStripButton1.Text = "About";
+            this.toolStripButtonAbout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonAbout.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAbout.Image")));
+            this.toolStripButtonAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAbout.Name = "toolStripButtonAbout";
+            this.toolStripButtonAbout.Size = new System.Drawing.Size(44, 22);
+            this.toolStripButtonAbout.Text = "About";
             // 
             // btnRefresh
             // 
@@ -340,6 +342,13 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "NO IMPROVEMENT";
             // 
+            // logoutToolStripMenuItem
+            // 
+            this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
+            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.logoutToolStripMenuItem.Text = "Logout";
+            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
+            // 
             // formInput
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -377,7 +386,7 @@
         private System.Windows.Forms.ToolStripMenuItem changePasswordToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem preferenceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem shutdownToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonAbout;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.LinkLabel linkHospitalization;
@@ -395,6 +404,7 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.LinkLabel linkLabelNoImprovement;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStripMenuItem logoutToolStripMenuItem;
     }
 }
 
