@@ -148,8 +148,8 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Image x:Name="imgUsername" HorizontalAlignment="Center" Height="20" Margin="0,276,0,0" VerticalAlignment="Top" Width="20" Source="C:\Users\user\source\repos\NoLandholdingApp\LoginScreen\Assets\username.png"/>
-        <Image x:Name="imgPassword" HorizontalAlignment="Center" Height="20" Margin="0,338,0,0" VerticalAlignment="Top" Width="20" Source="C:\Users\user\source\repos\NoLandholdingApp\LoginScreen\Assets\password.png"/>
+        <Image x:Name="imgUsername" HorizontalAlignment="Center" Height="20" Margin="0,276,0,0" VerticalAlignment="Top" Width="20" Source="pack://application:,,,/username.png"/>
+        <Image x:Name="imgPassword" HorizontalAlignment="Center" Height="20" Margin="0,338,0,0" VerticalAlignment="Top" Width="20" Source="pack://application:,,,/password.png"/>
         <Button x:Name="btnCreate" Content="Create Account" Margin="166,571,10,0" 
         VerticalAlignment="Top" Height="19" Foreground="#FF18254C" 
         Background="Transparent" BorderBrush="Transparent" Grid.Column="1" 
@@ -179,7 +179,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Image Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="127" Margin="229,90,0,0" VerticalAlignment="Top" Width="127" Source="C:\Users\user\source\repos\NoLandholdingApp\LoginScreen\Assets\assessorlogo.jpg"/>
+        <Image Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="127" Margin="229,90,0,0" VerticalAlignment="Top" Width="127" Source="pack://application:,,,/assessorlogo.jpg"/>
 
         <Label x:Name="lblMessage"
                Content=""

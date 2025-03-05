@@ -14,7 +14,10 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <PublishUrl>C:\Users\user\Desktop\certification\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -24,13 +27,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <AutorunEnabled>true</AutorunEnabled>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -83,6 +85,12 @@
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>D927D40CADA38137EC33C98441CC0F0445C58D90</ManifestCertificateThumbprint>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AspNetCore.Reporting, Version=2.1.0.0, Culture=neutral, PublicKeyToken=2bae00f048aee5c9, processorArchitecture=MSIL">
@@ -241,13 +249,6 @@
     </Compile>
     <Compile Include="classes\printDialog.cs" />
     <Compile Include="ConfigHelper2.cs" />
-    <Compile Include="Properties\VersionInfo.cs" />
-    <Compile Include="ui\DatabaseSetup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ui\DatabaseSetup.Designer.cs">
-      <DependentUpon>DatabaseSetup.cs</DependentUpon>
-    </Compile>
     <Compile Include="noLandHolding\bailbond.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -309,9 +310,6 @@
     <EmbeddedResource Include="rdlc\CertificationReport-Scholarship.rdlc" />
     <EmbeddedResource Include="rdlc\searchForms\CertificationReport-Scholarship.rdlc" />
     <EmbeddedResource Include="rdlc\searchForms\CertificationReport.rdlc" />
-    <EmbeddedResource Include="ui\DatabaseSetup.resx">
-      <DependentUpon>DatabaseSetup.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="noLandHolding\bailbond.resx">
       <DependentUpon>bailbond.cs</DependentUpon>
     </EmbeddedResource>
@@ -429,12 +427,13 @@
     <Error Condition="!Exists('..\packages\MaterialDesignThemes.5.2.2-ci914\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MaterialDesignThemes.5.2.2-ci914\build\MaterialDesignThemes.targets'))" />
   </Target>
   <Import Project="..\packages\MaterialDesignThemes.5.2.2-ci914\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.5.2.2-ci914\build\MaterialDesignThemes.targets')" />
-
-<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-<Exec Command="powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;$(ProjectDir)GenerateVersion.ps1&quot;" />
-</Target>
-<ItemGroup>
-	<Compile Include="Properties\VersionInfo.cs" Condition="Exists('Properties\VersionInfo.cs')" />
-</ItemGroup>
-
+  <!--  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;$(ProjectDir)GenerateVersion.ps1&quot;" />
+  </Target>
+  <ItemGroup>
+    <Compile Include="Properties\VersionInfo.cs" Condition="Exists('Properties\VersionInfo.cs')" />
+  </ItemGroup> -->
+  <Target Name="SyncAssemblyVersion" BeforeTargets="BeforeBuild">
+    <Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(ProjectDir)UpdateAssemblyVersion.ps1&quot;" />
+  </Target>
 </Project>

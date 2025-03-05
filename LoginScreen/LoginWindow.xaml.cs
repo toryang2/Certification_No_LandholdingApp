@@ -26,13 +26,26 @@ namespace LoginScreen
             InitializeComponent();
             this.MouseLeftButtonDown += (s, e) => DragMove(); // Allows dragging
 
-            // Load configuration
-            config = ConfigHelper.LoadConfig();
-            if (config == null || !config.ContainsKey("Server") || !config.ContainsKey("Database"))
+            if (!LoadConfigAndInitialize())
             {
-                MessageBox.Show("Config file is missing or incomplete!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
-                return;
+                var dbSetup = new DatabaseSetup();
+                dbSetup.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+                dbSetup.ShowDialog();  // Blocks until form closes
+
+                if (dbSetup.ConfigSaved)
+                {
+                    // Reload config after saving
+                    if (!LoadConfigAndInitialize())
+                    {
+                        MessageBox.Show("Configuration is still invalid. Exiting application.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        Application.Current.Shutdown();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Configuration setup was canceled. Exiting application.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Application.Current.Shutdown();
+                }
             }
 
             // Placeholder logic
@@ -95,6 +108,17 @@ namespace LoginScreen
             txtInitial.GotFocus += TextBox_GotFocus;
             txtPassword.GotFocus += PasswordBox_GotFocus; // PasswordBox handled separately
             txtFullName.GotFocus += TextBox_GotFocus;
+        }
+
+        private bool LoadConfigAndInitialize()
+        {
+            config = ConfigHelper.LoadConfig();
+            if (config == null || !config.ContainsKey("Server") || !config.ContainsKey("Database"))
+            {
+                return false; // Config invalid
+            }
+            // Config is valid, continue initializing other things if needed
+            return true;
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)

@@ -149,6 +149,8 @@ namespace NoLandholdingApp
 
             LoadDatabase();
             ApplyAccessControl();
+
+            changePasswordToolStripMenuItem.Enabled = false;
         }
 
         private void SetFormProperties()
@@ -1442,14 +1444,10 @@ namespace NoLandholdingApp
             this.KeyPreview = true;
             // Subscribe to KeyDown event
             this.KeyDown += new KeyEventHandler(DatabaseReload_KeyDown);
+
         }
 
         private void toolStripLabel1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void shutdownToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
@@ -1634,5 +1632,9 @@ namespace NoLandholdingApp
             }
         }
 
+        private void shutdownToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

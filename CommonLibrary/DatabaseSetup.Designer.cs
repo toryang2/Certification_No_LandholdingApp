@@ -1,4 +1,4 @@
-﻿namespace NoLandholdingApp
+﻿namespace CommonLibrary
 {
     partial class DatabaseSetup
     {

@@ -7,26 +7,62 @@ namespace CommonLibrary
 {
     public class ConfigHelper
     {
-        private static readonly string configPath = "config.ini";
+        private static readonly string CompanyName = "LGU Kitaotao";
+        private static readonly string AppName = "Assessor Certifcate";
+        private static readonly string ConfigFileName = "config.ini";
+
+        // MSIX-compatible config path
+        private static readonly string LocalConfigPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            CompanyName,
+            AppName,
+            ConfigFileName
+        );
+
+        // Original install location path (read-only in MSIX)
+        private static readonly string OriginalConfigPath = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            ConfigFileName
+        );
 
         /// <summary>
-        /// Loads the configuration from the config.ini file.
+        /// Initializes the config system, migrating existing config if needed
         /// </summary>
-        /// <returns>A dictionary containing configuration key-value pairs or null if the file is missing.</returns>
+        static ConfigHelper()
+        {
+            InitializeConfigFolder();
+        }
+
+        private static void InitializeConfigFolder()
+        {
+            var configDirectory = Path.GetDirectoryName(LocalConfigPath);
+
+            // Ensure local config directory exists
+            Directory.CreateDirectory(configDirectory);
+
+            // Migrate config from original location if needed
+            if (!File.Exists(LocalConfigPath) && File.Exists(OriginalConfigPath))
+            {
+                File.Copy(OriginalConfigPath, LocalConfigPath, overwrite: false);
+            }
+        }
+
         public static Dictionary<string, string> LoadConfig()
         {
-            if (!File.Exists(configPath))
+            if (!File.Exists(LocalConfigPath))
             {
-                return null; // Indicate that the config file is missing
+                return null; // Config doesn't exist in either location
             }
 
             var config = new Dictionary<string, string>();
 
-            foreach (var line in File.ReadAllLines(configPath))
+            foreach (var line in File.ReadAllLines(LocalConfigPath))
             {
-                if (!string.IsNullOrWhiteSpace(line) && line.Contains('=') && !line.StartsWith("["))
+                if (!string.IsNullOrWhiteSpace(line) &&
+                    line.Contains('=') &&
+                    !line.StartsWith("["))
                 {
-                    var parts = line.Split(new[] { '=' }, 2); // Split into key and value
+                    var parts = line.Split(new[] { '=' }, 2);
                     config[parts[0].Trim()] = parts[1].Trim();
                 }
             }
@@ -34,23 +70,20 @@ namespace CommonLibrary
             return config;
         }
 
-        /// <summary>
-        /// Saves the given configuration dictionary to the config.ini file.
-        /// </summary>
         public static void SaveConfig(Dictionary<string, string> config)
         {
             if (config == null || config.Count == 0)
-                return; // Do nothing if the config is empty
-
-            // Ensure the file exists before writing
-            if (!File.Exists(configPath))
-            {
-                File.Create(configPath).Close(); // Create and close to avoid locking issues
-            }
+                return;
 
             var lines = new List<string> { "[Database]" };
             lines.AddRange(config.Select(kvp => $"{kvp.Key}={kvp.Value}"));
-            File.WriteAllLines(configPath, lines);
+
+            File.WriteAllLines(LocalConfigPath, lines);
+        }
+
+        public static string GetConfigPath()
+        {
+            return LocalConfigPath;
         }
     }
 }

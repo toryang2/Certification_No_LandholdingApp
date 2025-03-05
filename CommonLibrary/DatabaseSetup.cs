@@ -9,14 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using MySql.Data.MySqlClient;
-using CommonLibrary;
 
 
-namespace NoLandholdingApp
+namespace CommonLibrary
 {
     public partial class DatabaseSetup : Form
     {
-
+        public bool ConfigSaved { get; private set; } = false;
         public DatabaseSetup()
         {
             InitializeComponent();
@@ -25,7 +24,7 @@ namespace NoLandholdingApp
 
             this.KeyPreview = true;
             this.KeyDown += DatabaseSetup_KeyDown;
-            this.Icon = Properties.Resources.dataserver;
+            //this.Icon = Properties.Resources.dataserver;
         }
 
         private void checkBoxEnableDatabaseEdit_CheckedChanged(object sender, EventArgs e)
@@ -48,41 +47,44 @@ namespace NoLandholdingApp
 
         private void LoadDatabaseSettings()
         {
-            if (File.Exists("config.ini")) // Check if config.ini exists
-            {
-                var config = ConfigHelper.LoadConfig();
-                if (config.Count > 0)
-                {
-                    txtServer.Text = config.ContainsKey("Server") ? config["Server"] : "";
-                    txtDatabase.Text = config.ContainsKey("Database") ? config["Database"] : "";
-                    txtUser.Text = config.ContainsKey("User") ? config["User"] : "";
-                    txtPassword.Text = config.ContainsKey("Password") ? config["Password"] : "";
-                    txtPort.Text = config.ContainsKey("Port") ? config["Port"] : "";
+            var config = ConfigHelper.LoadConfig();
 
-                    btnSave.Enabled = false; // Keep save disabled until a successful test connection
-                }
+            if (config != null && config.Count > 0)
+            {
+                txtServer.Text = config.ContainsKey("Server") ? config["Server"] : "";
+                txtDatabase.Text = config.ContainsKey("Database") ? config["Database"] : "";
+                txtUser.Text = config.ContainsKey("User") ? config["User"] : "";
+                txtPassword.Text = config.ContainsKey("Password") ? config["Password"] : "";
+                txtPort.Text = config.ContainsKey("Port") ? config["Port"] : "";
+
+                btnSave.Enabled = false; // Initially disable save until test is successful
+            }
+            else
+            {
+                MessageBox.Show("Configuration file is missing or empty.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             var config = new Dictionary<string, string>
-            {
-                { "Server", txtServer.Text.Trim() },
-                { "Database", txtDatabase.Text.Trim() },
-                { "User", txtUser.Text.Trim() },
-                { "Password", txtPassword.Text.Trim() },
-                { "Port", txtPort.Text.Trim() }
-            };
+    {
+        { "Server", txtServer.Text.Trim() },
+        { "Database", txtDatabase.Text.Trim() },
+        { "User", txtUser.Text.Trim() },
+        { "Password", txtPassword.Text.Trim() },
+        { "Port", txtPort.Text.Trim() }
+    };
 
             ConfigHelper.SaveConfig(config);
 
-            if (File.Exists("config.ini"))
+            // Check if saved correctly
+            if (ConfigHelper.LoadConfig() != null)
             {
                 MessageBox.Show("Config file has been saved.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnSave.Focus();
-                this.Hide();
-
+                ConfigSaved = true; // Indicate success
+                this.Close();
             }
             else
             {
